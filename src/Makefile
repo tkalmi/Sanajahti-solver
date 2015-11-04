@@ -1,7 +1,7 @@
 CC=g++
 CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
-SOURCES=main.cpp rectangle.cpp rectangle.hpp
-OBJECTS=main.o rectangle.o
+SOURCES=main.cpp solver.cpp solver.hpp
+OBJECTS=main.o solver.o
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
