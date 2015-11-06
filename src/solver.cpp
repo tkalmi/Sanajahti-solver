@@ -81,7 +81,7 @@ void find_words(std::set<std::string> words,std::vector<std::vector<Tile>>& matr
     std::set<std::string> remaining_words;
     auto first_word = words.lower_bound(p.word());
     for (auto i = first_word; i != words.end(); i++){
-        if (boost::starts_with(*i, p.word())){
+        if (i->substr(0, p.word().length()) == p.word()){
             remaining_words.insert(*i);
         }
     }

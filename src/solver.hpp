@@ -5,7 +5,6 @@
 #include <set>
 #include <map>
 #include <sstream>
-#include <boost/algorithm/string/predicate.hpp>
 
 void rectangle();
 
