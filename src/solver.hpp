@@ -66,6 +66,7 @@ public:
      * Returns the word of the path.
      */
     std::string word() const;
+    std::wstring w_word() const;
     /* Description:
      * ------------
      * Return path word and coordinates in following format:
@@ -170,6 +171,7 @@ void move_to_tile(std::set<std::string> dictionary,std::vector<std::vector<Tile>
  */
 
 std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::string matrix_string);
+std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::wstring matrix_string);
 /*
  * Description:
  * ------------

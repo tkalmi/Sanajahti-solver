@@ -28,6 +28,10 @@ std::vector<Tile> Path::path(){
 std::string Path::word() const{
     return whole_word;
 }
+std::wstring Path::w_word() const{
+    std::wstring tmp(whole_word.begin(), whole_word.end());
+    return tmp;
+}
 std::string Path::path_str() const{
     std::stringstream ss;
     ss << whole_word;
@@ -243,6 +247,24 @@ std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::st
         i++;
     }
     matrix[x_size-1][y_size-1] = Tile(letter,x_size-1, y_size-1);
+    return matrix;
+}
+std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::wstring matrix_string){
+    std::vector<std::vector<Tile>> matrix;
+    std::wstringstream wss;
+    std::vector<Tile> column;
+    std::string tmp;
+    for (int i = 0; i<x_size; i++){
+        for (int j = 0; j < y_size; j++){ 
+            wss << matrix_string[i + j*x_size];
+            std::wstring wtmp = wss.str();
+            std::string tmp(wtmp.begin(),wtmp.end());
+            column.push_back(Tile(tmp,i,j));
+            wss.str(L"");
+        }
+        matrix.push_back(column);
+        column.clear();
+    }  
     return matrix;
 }
 
