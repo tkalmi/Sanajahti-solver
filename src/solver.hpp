@@ -6,7 +6,6 @@
 #include <map>
 #include <sstream>
 #include <string>
-#include <boost/locale/encoding_utf.hpp>
 
 namespace sj{
     

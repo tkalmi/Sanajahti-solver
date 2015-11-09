@@ -1,13 +1,14 @@
 CC=g++
 CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
-SOURCES=main.cpp solver.cpp solver.hpp
-OBJECTS=main.o solver.o
+LIBS=-lsfml-graphics -lsfml-window -lsfml-system
+SOURCES=main.cpp solver.cpp solver.hpp GUI.hpp GUI.cpp Screens.hpp Screens.cpp
+OBJECTS=main.o solver.o GUI.o Screens.o
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
   
 $(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@ 
+	$(CC) $(OBJECTS) $(LIBS) $(LDFLAGS) -o $@ 
 
 .cc.o:
 	$(CC) $(CPPFLAGS) $< -o $@
