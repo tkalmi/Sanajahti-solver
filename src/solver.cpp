@@ -50,7 +50,7 @@ bool Path::operator<(const Path t) const{
     if (str_len(whole_word) == str_len(t.word()))
         return whole_word < t.word();
     else
-        return str_len(whole_word) < str_len(t.word());
+        return str_len(whole_word) > str_len(t.word());
 }
 bool Path::operator==(const Path t) const{
     return whole_word == t.word();
@@ -233,7 +233,7 @@ std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::st
             if (i != 0){
                 index = len - 2;
                 x_index = index % x_size;
-                y_index = index / y_size;
+                y_index = index / x_size;
                 matrix[x_index][y_index] = Tile(letter,x_index, y_index);
             }
             letter = "";
