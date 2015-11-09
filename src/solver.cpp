@@ -47,10 +47,10 @@ bool Path::in_path(const Tile t) const{
     return(std::find(tiles.begin(),tiles.end(), t) != tiles.end());
 }
 bool Path::operator<(const Path t) const{
-    if (whole_word.length() == t.word().length())
+    if (str_len(whole_word) == str_len(t.word()))
         return whole_word < t.word();
     else
-        return whole_word.length() < t.word().length();
+        return str_len(whole_word) < str_len(t.word());
 }
 bool Path::operator==(const Path t) const{
     return whole_word == t.word();
@@ -69,10 +69,10 @@ bool Path::operator==(const Path t) const{
 std::vector<Path> sj::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::string> dictionary) {
     std::map<std::string, std::set<std::string>> dictionaries;
     std::stringstream ss;
+    std::string letter;
     for (std::string word : dictionary){
-        ss << word[0];
-        dictionaries[ss.str()].insert(word);
-        ss.str("");
+        letter = first_character(word);
+        dictionaries[letter].insert(word);
     }
     std::vector<Path> found_words;
     /*Use each tile in matrix as starting point for path*/
@@ -204,19 +204,75 @@ std::vector<Tile> sj::find_nearby(std::vector<std::vector<Tile>>& matrix, Path p
  * y_size : matrix size in y-axis
  * matrix_string : matrix in format "xxxxxxxxxxxxxxx"
  */
-std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::string matrix_string){   
+std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::string matrix_string){
     std::stringstream ss;
+    Tile a("a",0,0);
     std::vector<std::vector<Tile>> matrix;
     std::vector<Tile> line;
+    /*Create empty matrix*/
     for (int i = 0; i<x_size; i++){
-        for (int j = 0; j < y_size; j++){
-            ss << matrix_string[x_size*j + i];
-            std::string letter = ss.str();
-            line.push_back(Tile(letter,i,j));
-            ss.str("");
+        for (int j = 0; j < y_size; j++){ 
+            line.push_back(a);
         }
         matrix.push_back(line);
-        line.clear();
     }
+    std::string first_char;
+    std::string letter;
+    int len = 0;
+    int i = 0;
+    int index = 0;
+    int x_index = 0;
+    int y_index = 0;
+    /*Each character is separated from matrix string*/
+    while (matrix_string[i]){
+        if ((matrix_string[i] & 0xc0) == 0x80){
+            letter += matrix_string[i];
+        }
+        else if ((matrix_string[i] & 0xc0) != 0x80){
+            len++;
+            if (i != 0){
+                index = len - 2;
+                x_index = index % x_size;
+                y_index = index / y_size;
+                matrix[x_index][y_index] = Tile(letter,x_index, y_index);
+            }
+            letter = "";
+            letter = matrix_string[i];
+
+        }
+        i++;
+    }
+    matrix[x_size-1][y_size-1] = Tile(letter,x_size-1, y_size-1);
     return matrix;
+}
+
+std::string sj::first_character(std::string str){
+    int i = 0;
+    std::string letter;
+    while (str[i]){
+        
+        if ((str[i] & 0xc0) != 0x80){
+            if (i != 0){
+                return letter;
+            }
+            letter = str[i];
+        }
+        else if ((str[i] & 0xc0) == 0x80){
+            letter += str[i];
+        }
+        i++;
+    }
+    return "";   
+}
+
+int sj::str_len(std::string str){
+    int i = 0;
+    int len = 0;
+    while (str[i]){
+        if ((str[i] & 0xc0) != 0x80){
+            len++;
+        }
+        i++;
+    }
+    return len;   
 }

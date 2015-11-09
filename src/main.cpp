@@ -12,7 +12,7 @@ int main(void) {
         words.insert(line);
     }
     file.close();
-    std::vector<std::vector<sj::Tile>> matrix = sj::create_matrix(4,4,"tarrottajiiplipa");
+    std::vector<std::vector<sj::Tile>> matrix = sj::create_matrix(4,4, "ででäでalでetトsåij");
     auto t = sj::find_words(matrix, words);
     for (auto i : t){
         std::cout << i.path_str() << std::endl;

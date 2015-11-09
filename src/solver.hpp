@@ -5,6 +5,8 @@
 #include <set>
 #include <map>
 #include <sstream>
+#include <string>
+#include <boost/locale/encoding_utf.hpp>
 
 namespace sj{
     
@@ -167,8 +169,21 @@ void move_to_tile(std::set<std::string> dictionary,std::vector<std::vector<Tile>
  * y_size : matrix size in y-axis
  * matrix_string : matrix in format "xxxxxxxxxxxxxxx"
  */
-std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::string matrix_string);
 
+std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::string matrix_string);
+/*
+ * Description:
+ * ------------
+ * Returns first character of a string as a string
+ * 
+ * Parameters:
+ * -----------
+ * str : string
+ */
+std::string first_character(std::string str);
+
+int str_len(std::string str);
 }
+
 
 #endif
