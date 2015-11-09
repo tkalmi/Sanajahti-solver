@@ -49,8 +49,8 @@ public:
 	TextField(unsigned int x, unsigned int y, unsigned int width, unsigned int height, bool selected) : x(x), y(y), width(width), height(height), selected(selected) {};
 	bool getSelected();
 	void setSelected(bool is_selected);
-	std::string getContent();
-	void setContent(std::string new_content);	
+	std::wstring getContent();
+	void setContent(std::wstring new_content);	
 	void draw(sf::RenderWindow &window);
 	bool isInside(sf::Vector2i mouse_pos);
 	void setInPath(bool is_in_path);
@@ -60,7 +60,7 @@ private:
 	unsigned int width;
 	unsigned int height;
 	bool selected; // selected for input
-	std::string content = "";
+	std::wstring content = L"";
 	bool in_path = false; // is TextField in path, ie. should it be painted green
 };
 
@@ -77,7 +77,7 @@ public:
 	unsigned int getSelectedTileIndex();
 	void selectNextEmpty();
 	bool isMatrixFilled();
-	std::string getAsString();
+	std::wstring getAsString();
 private:
 	unsigned int x; // x-coordinate of position
 	unsigned int y; // y-coordinate of position

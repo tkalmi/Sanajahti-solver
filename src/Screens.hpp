@@ -31,23 +31,23 @@ private:
 /****************************************************************************/
 class InputMatrix : public Screen {
 public:
-	InputMatrix(unsigned int &M, unsigned int &N, std::string &matrix_as_string) : M(M), N(N), matrix_as_string(matrix_as_string) {};
+	InputMatrix(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string) : M(M), N(N), matrix_as_string(matrix_as_string) {};
 	virtual std::string Run(sf::RenderWindow &window);
 private:
 	unsigned int &M; // M-dimension of matrix
 	unsigned int &N; // N-dimension of matrix
-	std::string &matrix_as_string;
+	std::wstring &matrix_as_string;
 };
 
 /****************************************************************************/
 class SolveScreen : public Screen {
 public:
-	SolveScreen(unsigned int &M, unsigned int &N, std::string &matrix_as_string, std::set<std::string> words) : M(M), N(N), matrix_as_string(matrix_as_string), words(words) {};
+	SolveScreen(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string, std::set<std::string> words) : M(M), N(N), matrix_as_string(matrix_as_string), words(words) {};
 	virtual std::string Run(sf::RenderWindow &window);
 private:
 	unsigned int &M; // M-dimension of matrix
 	unsigned int &N; // N-dimension of matrix
-	std::string &matrix_as_string; 
+	std::wstring &matrix_as_string; 
 	std::set<std::string> words; // kotus-list
 };
 

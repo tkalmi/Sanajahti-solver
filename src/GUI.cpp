@@ -120,12 +120,12 @@ void TextField::setSelected(bool is_selected)
 	selected = is_selected;
 }
 
-std::string TextField::getContent()
+std::wstring TextField::getContent()
 {
 	return content;
 }
 
-void TextField::setContent(std::string new_content)
+void TextField::setContent(std::wstring new_content)
 {
 	content = new_content;
 }
@@ -281,7 +281,7 @@ void TextFieldMatrix::selectNextEmpty()
 	unsigned int selected_ind = this->getSelectedTileIndex();
 
 	for (unsigned int i = selected_ind + 1; i < size; i++) { // select next empty tile AFTER the currently selected tile
-		if (this->getTile(i).getContent() == "") {
+		if (this->getTile(i).getContent() == L"") {
 			this->getTile(selected_ind).setSelected(false);
 			this->getTile(i).setSelected(true);
 			return;
@@ -289,7 +289,7 @@ void TextFieldMatrix::selectNextEmpty()
 	}
 	// if no empty tiles after the currently selected tile, select FIRST empty tile
 	for (unsigned int i = 0; i < selected_ind; i++) {
-		if (this->getTile(i).getContent() == "") {
+		if (this->getTile(i).getContent() == L"") {
 			this->getTile(selected_ind).setSelected(false);
 			this->getTile(i).setSelected(true);
 			return;
@@ -302,15 +302,15 @@ void TextFieldMatrix::selectNextEmpty()
 bool TextFieldMatrix::isMatrixFilled()
 {
 	for (unsigned int i = 0; i < M * N; i++) { // loop through all textfields
-		if (this->getTile(i).getContent() == "")
+		if (this->getTile(i).getContent() == L"")
 			return false;
 	}
 	return true;
 }
 
-std::string TextFieldMatrix::getAsString() 
+std::wstring TextFieldMatrix::getAsString() 
 {
-	std::string contents = "";
+	std::wstring contents = L"";
 	for (unsigned int i = 0; i < M * N; i++) {
 		contents += this->getTile(i).getContent();
 	}
@@ -332,7 +332,7 @@ int GUI::run()
 
 	unsigned int M;
 	unsigned int N;
-	std::string matrix_as_string;
+	std::wstring matrix_as_string;
 
 	SizeQuery *s1 = new SizeQuery(M, N);
 	screens["size_query"] = s1; 

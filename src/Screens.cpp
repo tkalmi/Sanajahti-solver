@@ -175,13 +175,13 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 					N_field.setSelected(true);
 				}
 				if (jatka.isInside(sf::Mouse::getPosition(window))) { // user clicked "jatka"
-					if (M_field.getContent() != "" && N_field.getContent() != "") { // check that the M and N fields are properly filled
+					if (M_field.getContent() != L"" && N_field.getContent() != L"") { // check that the M and N fields are properly filled
 						// pass the dimensions and move on to input matrix screen
 						x_dim = std::stoi(M_field.getContent());
 						y_dim = std::stoi(N_field.getContent());
 						return "input_matrix";
 					}
-					else if (M_field.getContent() == "") {
+					else if (M_field.getContent() == L"") {
 						M_field.setSelected(true);
 						N_field.setSelected(false);
 					}
@@ -197,12 +197,12 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 			if (event.type == sf::Event::TextEntered) {
 				if (event.text.unicode >= 48 && event.text.unicode <= 57) { // check that input was numeral
 					if (M_field.getSelected()) {
-						if (event.text.unicode != 48 || M_field.getContent() != "") // check that 0 is not the first digit
-							M_field.setContent(M_field.getContent() + static_cast<char>(event.text.unicode));
+						if (event.text.unicode != 48 || M_field.getContent() != L"") // check that 0 is not the first digit
+							M_field.setContent(M_field.getContent() + static_cast<wchar_t>(event.text.unicode));
 					}
 					else {
-						if (event.text.unicode != 48 || N_field.getContent() != "") // check that 0 is not the first digit
-							N_field.setContent(N_field.getContent() + static_cast<char>(event.text.unicode));
+						if (event.text.unicode != 48 || N_field.getContent() != L"") // check that 0 is not the first digit
+							N_field.setContent(N_field.getContent() + static_cast<wchar_t>(event.text.unicode));
 					}
 				}
 			}
@@ -222,8 +222,8 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 					M_field.setSelected(false);
 					N_field.setSelected(true);
 				}
-				if (N_field.getSelected() && N_field.getContent() != "") { // move on to next screen
-					if (M_field.getContent() == "") {
+				if (N_field.getSelected() && N_field.getContent() != L"") { // move on to next screen
+					if (M_field.getContent() == L"") {
 						M_field.setSelected(true);
 						N_field.setSelected(false);
 					}
@@ -257,11 +257,11 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 
 /****************************************************************************/
 /* Helper function for determining if character is allowed */
-bool isValidChar(char input)
+bool isValidChar(wchar_t input)
 {
-	for (char c : VALID_CHARS) {
-	if (input == c)
-	return true;
+	for (wchar_t c : VALID_CHARS) {
+		if (input == c)
+			return true;
 	}
 	return false;
 }
@@ -349,12 +349,12 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 				}
 				if (ratkaise.isInside(sf::Mouse::getPosition(window))) { // user clicked "ratkaise"
 					if (!matrix.isMatrixFilled()) {
-						if (matrix.getSelectedTile().getContent() != "")
+						if (matrix.getSelectedTile().getContent() != L"")
 							matrix.selectNextEmpty();
 					}
 					else {
 						// turn matrix to a string and move on to solve screen
-						for (char &c : matrix_as_string) { // change every character in matrix_as_string to lower case
+						for (wchar_t &c : matrix_as_string) { // change every character in matrix_as_string to lower case
 							c = tolower(c);
 						}
 						matrix_as_string = matrix.getAsString();
@@ -364,15 +364,15 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 			}
 			/* user entered text */
 			if (event.type == sf::Event::TextEntered) { // user entered text
-				if (isValidChar(static_cast<char>(event.text.unicode))) { // check that input was a valid letter 
-					matrix.getSelectedTile().setContent(""); // clear content, so that content is only one char long at a time
-					matrix.getSelectedTile().setContent(matrix.getSelectedTile().getContent() + static_cast<char>(event.text.unicode)); // set the content of cell to typed char
+				if (isValidChar(static_cast<wchar_t>(event.text.unicode))) { // check that input was a valid letter 
+					matrix.getSelectedTile().setContent(L""); // clear content, so that content is only one char long at a time
+					matrix.getSelectedTile().setContent(matrix.getSelectedTile().getContent() + static_cast<wchar_t>(event.text.unicode)); // set the content of cell to typed char
 					matrix.selectNextEmpty(); // select next unfilled tile
 				}
 			}
 			/* user pressed backspace */
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !backspaceUsed) {
-				matrix.getSelectedTile().setContent("");
+				matrix.getSelectedTile().setContent(L"");
 				if (matrix.getSelectedTileIndex() > 0)
 					matrix.selectTile(matrix.getSelectedTileIndex() - 1);
 				backspaceUsed = true; // ensure that every stroke of backspace deletes only one digit
@@ -385,7 +385,7 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 				if (matrix.isMatrixFilled()) {
 					// turn matrix to a string and move on to solve screen
 					matrix_as_string = matrix.getAsString();
-					for (char &c : matrix_as_string) { // change every character in matrix_as_string to lower case
+					for (wchar_t &c : matrix_as_string) { // change every character in matrix_as_string to lower case
 						c = tolower(c);
 					}
 					return "solve_screen";
@@ -410,11 +410,11 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 }
 
 /****************************************************************************/
-std::vector<std::string> getSolvedWordsAsStrings(std::vector<Path> solved_words)
+std::vector<std::wstring> getSolvedWordsAsStrings(std::vector<Path> solved_words)
 {
-	std::vector<std::string> found_words;
+	std::vector<std::wstring> found_words;
 	for (Path solved_word : solved_words) {
-		found_words.push_back(solved_word.word());
+		found_words.push_back(solved_word.w_word());
 	}
 	return found_words;
 }
@@ -519,7 +519,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 	// solve the matrix
 	auto char_matrix = create_matrix(M, N, matrix_as_string);
 	std::vector<Path> solved_words = find_words(char_matrix, words);
-	std::vector<std::string> solved_words_string = getSolvedWordsAsStrings(solved_words);
+	std::vector<std::wstring> solved_words_string = getSolvedWordsAsStrings(solved_words);
 	unsigned int page_count_max = (unsigned int)ceil(solved_words_string.size() / (float)(2 * 15)); // how many pages there are
 
 	// fill textfield matrix with correct letters
@@ -607,7 +607,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 				if (solved_words_string.size() > i)
 					solved_list.getTile(i - 2 * 15 * page_count).setContent(solved_words_string[i]);
 				else
-					solved_list.getTile(i - 2 * 15 * page_count).setContent("");
+					solved_list.getTile(i - 2 * 15 * page_count).setContent(L"");
 			}
 			page_count_changed = false;
 		}
