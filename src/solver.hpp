@@ -192,6 +192,7 @@ std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::wstrin
  */
 std::string first_character(std::string str);
 std::wstring utf8_to_wstring(const std::string& str);
+std::string utf8_to_string(const std::wstring& str);
 int str_len(std::string str);
 }
 
