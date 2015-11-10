@@ -22,10 +22,10 @@ int main(int argc, char **argv)
                 std::cout << "filename: " << filename << std::endl;
                 break;
             case 'm':
-                M = (int)optarg; // Oliko tälläiset conversiot ok?
+                M = static_cast<int>(optarg);
                 break;
             case 'n':
-                N = (int)optarg;
+                N = static_cast<int>(optarg);
                 break;
             case '?':
                 if (optopt == 'c')
