@@ -6,6 +6,9 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <locale>
+#include <boost/locale/encoding_utf.hpp>
+#include <string>
 
 namespace sj{
     
@@ -22,6 +25,7 @@ public:
      * yk : y-coordinate of the tile
      */
     Tile(std::string character, int xk, int yk);
+    Tile(std::wstring character, int xk, int yk);
     /* Description:
      * ----------
      * Returns x-coordinate of the tile.
@@ -37,12 +41,14 @@ public:
      * Returns character of the tile.
      */
     std::string c() const;
+    std::wstring wchar() const;
     bool operator==(const Tile& t) const;
     
 private:
     int xkoord;
     int ykoord;
     std::string ch;
+    std::wstring wch;
 };
 
 class Path {
@@ -102,6 +108,7 @@ public:
 private:
     std::vector<Tile> tiles;
     std::string whole_word;
+    std::wstring wide_word;
 };
 
  /*
@@ -116,6 +123,7 @@ private:
  * wordlist : dictionary to check for words
  */
 std::vector<Path> find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::string> dictionary);
+std::vector<Path> find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::wstring> dictionary);
 
 /*
  * Description:
@@ -151,6 +159,7 @@ std::vector<Tile> find_nearby(std::vector<std::vector<Tile>>& matrix, Path path)
  *               found from the matrix
  */
 void move_to_tile(std::set<std::string> dictionary,std::vector<std::vector<Tile>>& matrix, Path p, Tile next_tile, std::vector<Path>& found_words);
+void move_to_tile(std::set<std::wstring> dictionary,std::vector<std::vector<Tile>>& matrix, Path p, Tile next_tile, std::vector<Path>& found_words);
 
 /*
  * Description:
@@ -182,9 +191,10 @@ std::vector<std::vector<Tile>> create_matrix(int x_size, int y_size, std::wstrin
  * str : string
  */
 std::string first_character(std::string str);
-
+std::wstring utf8_to_wstring(const std::string& str);
 int str_len(std::string str);
 }
+
 
 
 #endif

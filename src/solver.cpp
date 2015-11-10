@@ -4,6 +4,7 @@ using namespace sj;
 
 /****************************************************************************/
 sj::Tile::Tile(std::string character, int xk, int yk) : xkoord(xk), ykoord(yk), ch(character) {}
+sj::Tile::Tile(std::wstring character, int xk, int yk) : xkoord(xk), ykoord(yk), wch(character) {}
 int Tile::x() const{
     return xkoord;
 }
@@ -13,6 +14,9 @@ int Tile::y() const{
 std::string Tile::c() const{
     return ch;
 }
+std::wstring Tile::wchar() const{
+    return wch;
+}
 bool Tile::operator==(const Tile& t) const{
     return ( t.x() == xkoord && t.y() == ykoord && t.c() == ch);
 }
@@ -21,6 +25,7 @@ bool Tile::operator==(const Tile& t) const{
 sj::Path::Path(Tile t){
     tiles.push_back(t);
     whole_word = t.c();
+    wide_word = t.wchar();
 }
 std::vector<Tile> Path::path(){
     return tiles;
@@ -29,8 +34,7 @@ std::string Path::word() const{
     return whole_word;
 }
 std::wstring Path::w_word() const{
-    std::wstring tmp(whole_word.begin(), whole_word.end());
-    return tmp;
+    return wide_word;
 }
 std::string Path::path_str() const{
     std::stringstream ss;
@@ -43,6 +47,7 @@ std::string Path::path_str() const{
 void Path::append(Tile t){
     tiles.push_back(t);
     whole_word += t.c();
+    wide_word += t.wchar();
 }
 Tile Path::last(){
     return tiles[tiles.size()-1];
@@ -51,13 +56,24 @@ bool Path::in_path(const Tile t) const{
     return(std::find(tiles.begin(),tiles.end(), t) != tiles.end());
 }
 bool Path::operator<(const Path t) const{
-    if (str_len(whole_word) == str_len(t.word()))
-        return whole_word < t.word();
-    else
-        return str_len(whole_word) > str_len(t.word());
+    if (wide_word.length() == 0){
+        if (str_len(whole_word) == str_len(t.word()))
+            return whole_word < t.word();
+        else
+            return str_len(whole_word) > str_len(t.word());
+    }
+    else {
+        if (wide_word.length() == t.w_word().length())
+            return wide_word < t.w_word();
+        else
+            return wide_word.length() > t.w_word().length();
+    }
 }
 bool Path::operator==(const Path t) const{
-    return whole_word == t.word();
+    if (wide_word.length() == 0)
+        return whole_word == t.word();
+    else
+        return wide_word == t.w_word();
 }
 /* find_words
  * Description:
@@ -72,7 +88,6 @@ bool Path::operator==(const Path t) const{
  */
 std::vector<Path> sj::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::string> dictionary) {
     std::map<std::string, std::set<std::string>> dictionaries;
-    std::stringstream ss;
     std::string letter;
     for (std::string word : dictionary){
         letter = first_character(word);
@@ -87,6 +102,28 @@ std::vector<Path> sj::find_words(std::vector<std::vector<Tile>>& matrix, std::se
             std::vector<Tile> nearby_tiles = find_nearby(matrix, path);
             for (Tile next_tile : nearby_tiles){
                 move_to_tile(dictionaries[k.c()], matrix, path, next_tile, found_words);
+            }
+        }
+    }
+    std::sort(found_words.begin(), found_words.end());
+    return found_words;
+}
+std::vector<Path> sj::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::wstring> dictionary) {
+    std::map<std::wstring, std::set<std::wstring>> dictionaries;
+    std::wstring letter;
+    for (std::wstring word : dictionary){
+        letter = word[0];
+        dictionaries[letter].insert(word);
+    }
+    std::vector<Path> found_words;
+    /*Use each tile in matrix as starting point for path*/
+    for (unsigned int i=0; i<matrix.size(); i++){
+        for (unsigned int j=0; j<matrix[0].size(); j++){
+            Tile k = matrix[i][j];
+            Path path(k);
+            std::vector<Tile> nearby_tiles = find_nearby(matrix, path);
+            for (Tile next_tile : nearby_tiles){
+                move_to_tile(dictionaries[k.wchar()], matrix, path, next_tile, found_words);
             }
         }
     }
@@ -134,6 +171,31 @@ void sj::move_to_tile(std::set<std::string> dictionary,std::vector<std::vector<T
         }
     }
     
+}
+
+void sj::move_to_tile(std::set<std::wstring> dictionary,std::vector<std::vector<Tile>>& matrix, Path p, Tile next_tile, std::vector<Path>& found_words){
+    p.append(next_tile);
+    /*Word is found from dictionary, length more than 2, word does not exist in found words*/
+    auto word = dictionary.find(p.w_word());
+    if (word != dictionary.end() && p.w_word().length() > 2 && std::find(found_words.begin(), found_words.end(), p) == found_words.end()){
+        found_words.push_back(p);
+    }
+    /*Find words from dictionary that begin with the same characters that the path contains*/
+    std::set<std::wstring> remaining_words;
+    auto first_word = dictionary.lower_bound(p.w_word());
+    for (auto i = first_word; i != dictionary.end(); i++){
+        if (i->substr(0, p.w_word().length()) == p.w_word()){
+            remaining_words.insert(*i);
+        }
+    }
+    /*If there are possible words in the dictionary, all nearby tiles are checked*/
+    if (remaining_words.size() > 0){
+        std::vector<Tile> nearby_tiles = find_nearby(matrix, p);
+        for (Tile next_tile : nearby_tiles){
+            move_to_tile(remaining_words, matrix, p, next_tile, found_words);
+        }
+    }
+  
 }
 /* find_nearby
  * Description:
@@ -257,9 +319,8 @@ std::vector<std::vector<Tile>> sj::create_matrix(int x_size, int y_size, std::ws
     for (int i = 0; i<x_size; i++){
         for (int j = 0; j < y_size; j++){ 
             wss << matrix_string[i + j*x_size];
-            std::wstring wtmp = wss.str();
-            std::string tmp(wtmp.begin(),wtmp.end());
-            column.push_back(Tile(tmp,i,j));
+            std::wstring wtemp = wss.str();
+            column.push_back(Tile(wtemp,i,j));
             wss.str(L"");
         }
         matrix.push_back(column);
@@ -297,4 +358,7 @@ int sj::str_len(std::string str){
         i++;
     }
     return len;   
+}
+std::wstring sj::utf8_to_wstring(const std::string& str){
+    return boost::locale::conv::utf_to_utf<wchar_t>(str.c_str(), str.c_str() + str.size());
 }
