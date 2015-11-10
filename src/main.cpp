@@ -7,6 +7,9 @@
 
 int main(int argc, char **argv)
 {
+    setlocale(LC_ALL, "");
+
+
     bool text_ui = false;
     int options;
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
@@ -39,7 +42,6 @@ int main(int argc, char **argv)
         }
     }
     
-    setlocale(LC_ALL, "");
     // get word list from file
     std::ifstream file;
     std::string line;
