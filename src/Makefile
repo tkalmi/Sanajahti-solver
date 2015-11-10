@@ -1,6 +1,7 @@
 CC=g++
-CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
-LIBS=-lsfml-graphics -lsfml-window -lsfml-system
+CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic $(INC)
+LIBS=-Llibraries/SFML-2.2/lib -lsfml-graphics -lsfml-window -lsfml-system
+INC=-Ilibraries/SFML-2.2/include
 SOURCES=main.cpp solver.cpp solver.hpp GUI.hpp GUI.cpp Screens.hpp Screens.cpp
 OBJECTS=main.o solver.o GUI.o Screens.o
 EXECUTABLE=main
