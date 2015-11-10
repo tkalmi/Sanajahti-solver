@@ -20,7 +20,7 @@ int main(void)
     //for (auto i : k){
     //    std::wcout << i.w_word() << std::endl;
     //}
-    //GUI gui(960, 640, words);
-    //gui.run();
+    GUI gui(960, 640, words);
+    gui.run();
     return 0;
 }

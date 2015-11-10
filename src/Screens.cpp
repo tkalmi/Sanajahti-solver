@@ -256,17 +256,6 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 }
 
 /****************************************************************************/
-/* Helper function for determining if character is allowed */
-bool isValidChar(wchar_t input)
-{
-	for (wchar_t c : VALID_CHARS) {
-		if (input == c)
-			return true;
-	}
-	return false;
-}
-
-/****************************************************************************/
 /* InputMatrix screen. Asks the user to fill the matrix */
 std::string InputMatrix::Run(sf::RenderWindow &window)
 {
@@ -364,7 +353,7 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 			}
 			/* user entered text */
 			if (event.type == sf::Event::TextEntered) { // user entered text
-				if (isValidChar(static_cast<wchar_t>(event.text.unicode))) { // check that input was a valid letter 
+				if ((event.text.unicode > 32 && event.text.unicode < 127) || event.text.unicode > 160) { // check that input was a valid letter 
 					matrix.getSelectedTile().setContent(L""); // clear content, so that content is only one char long at a time
 					matrix.getSelectedTile().setContent(matrix.getSelectedTile().getContent() + static_cast<wchar_t>(event.text.unicode)); // set the content of cell to typed char
 					matrix.selectNextEmpty(); // select next unfilled tile
