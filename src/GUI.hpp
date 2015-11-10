@@ -91,14 +91,14 @@ private:
 /****************************************************************************/
 class GUI {
 public:
-	GUI(unsigned int width, unsigned int height, std::set<std::string> words) : width(width), height(height), words(words) {};
+	GUI(unsigned int width, unsigned int height, std::set<std::wstring> words) : width(width), height(height), words(words) {};
 
 	int run();
 
 private:
 	unsigned int width;
 	unsigned int height; 
-	std::set<std::string> words;
+	std::set<std::wstring> words;
 };
 
 #endif // GUI_H
