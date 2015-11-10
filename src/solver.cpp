@@ -362,3 +362,6 @@ int sj::str_len(std::string str){
 std::wstring sj::utf8_to_wstring(const std::string& str){
     return boost::locale::conv::utf_to_utf<wchar_t>(str.c_str(), str.c_str() + str.size());
 }
+std::string sj::utf8_to_string(const std::wstring& str){
+    return boost::locale::conv::utf_to_utf<char>(str.c_str(), str.c_str() + str.size());
+}
