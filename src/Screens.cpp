@@ -506,8 +506,9 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 	unsigned int roll_index = 0; // current index of the word highlighted by roll all
 
 	// solve the matrix
-	auto char_matrix = create_matrix(M, N, matrix_as_string);
-	std::vector<Path> solved_words = find_words(char_matrix, words);
+	//auto char_matrix = create_matrix(M, N, matrix_as_string);
+        Solver matrix_solver(words, matrix_as_string, M, N);
+	std::vector<Path> solved_words = matrix_solver.Paths();
 	std::vector<std::wstring> solved_words_string = getSolvedWordsAsStrings(solved_words);
 	unsigned int page_count_max = (unsigned int)ceil(solved_words_string.size() / (float)(2 * 15)); // how many pages there are
 

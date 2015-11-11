@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "GUI.hpp"
+#include "solver.hpp"
 
 int main(void)
 {
@@ -12,15 +13,14 @@ int main(void)
     std::set<std::wstring> words;
     file.open("sanat.txt");
     while (std::getline(file, line)){
-        words.insert(boost::locale::conv::utf_to_utf<wchar_t>(line.c_str(),line.c_str() + line.size()));
+        words.insert(sj::utf8_to_wstring(line));
     }
     file.close();
-    //auto t = sj::create_matrix(4,5,L"homohomokäkihomohomo");
-    //auto k = sj::find_words(t,words);
-    //for (auto i : k){
-    //    std::wcout << i.w_word() << std::endl;
-    //}
     GUI gui(960, 640, words);
     gui.run();
+    //sj::Solver k(words, L"käkihomohomokäki",4,4);
+    //for (auto i : k.Paths()){
+    //    std::wcout << i.w_word() << std::endl;
+    //}
     return 0;
 }
