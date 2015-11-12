@@ -97,6 +97,43 @@ std::vector<Path> sj::Solver::Paths(){
     return word_paths;
 }
 
+
+void sj::Solver::Android_Solve(int x_size, int y_size){
+    int x_base_offset = x_size / 5.538;
+    int y_base_offset = y_size / 2.184;
+    int offset = x_size / 4.675;
+    std::stringstream ss;
+    int i = 0;
+    for (auto word : word_paths){
+        ss << "adb shell sendevent /dev/input/event3 3 57 " << i; //ABS_MT_TRACKING_ID
+        system(ss.str().c_str());
+        ss.str("");
+        system("adb shell sendevent /dev/input/event3 3 48 3"); // ABS_MT_TOUCH_MAJOR
+        
+        for (auto path : word.path()){
+            ss << "adb shell sendevent /dev/input/event3 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
+            system(ss.str().c_str());
+            ss.str("");
+            ss << "adb shell sendevent /dev/input/event3 3 54 " << path.y() * offset + y_base_offset; //ABS_MT_POSITION_Y
+            system(ss.str().c_str());
+            ss.str("");
+            if (i > 0){
+                if( i % 2 == 0){
+                    system("adb shell sendevent /dev/input/event3 3 003e 0"); //Dunno, somekind of swipe
+                }
+                else
+                    system("adb shell sendevent /dev/input/event3 3 003e 2"); //Dunno, somekind of swipe
+            }
+            system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
+            i++;
+        }
+        i = 0;
+        system("adb shell sendevent /dev/input/event3 3 57 4294967295"); // ABS_MT_TRACKING_ID
+        system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
+        ss.str("");
+    }
+}
+
 std::vector<Path> sj::Solver::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::wstring> dictionary) {
     std::map<std::wstring, std::set<std::wstring>> dictionaries;
     std::wstring letter;

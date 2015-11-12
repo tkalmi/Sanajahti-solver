@@ -4,6 +4,7 @@
 #include "GUI.hpp"
 #include "solver.hpp"
 
+//adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png
 int main(void)
 {
     setlocale(LC_ALL, "");
@@ -18,9 +19,10 @@ int main(void)
     file.close();
     GUI gui(960, 640, words);
     gui.run();
-    //sj::Solver k(words, L"käkihomohomokäki",4,4);
+    //sj::Solver k(words, "lpliaiagtuianioi",4,4);
     //for (auto i : k.Paths()){
-    //    std::wcout << i.w_word() << std::endl;
+    //    std::cout << i.path_str() << std::endl;
     //}
+    //k.Android_Solve(720, 1280);
     return 0;
 }

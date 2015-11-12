@@ -127,6 +127,16 @@ public:
      */
     std::vector<Path> Paths();
     
+    /*
+     * Solves paths on android with adb
+     * Does not check if sanajahti is open
+     * or anything else
+     * Parameters:
+     * x_size : screen size in pixels in x-dimension
+     * y_size : screen size in pixels in y-dimension
+     */
+    void Android_Solve(int x_size, int y_size);
+    
     
 private:
     /*
