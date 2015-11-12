@@ -119,10 +119,10 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
             ss.str("");
             if (i > 0){
                 if( i % 2 == 0){
-                    system("adb shell sendevent /dev/input/event3 3 003e 0"); //Dunno, somekind of swipe
+                    system("adb shell sendevent /dev/input/event3 3 003e 2"); //Dunno, somekind of swipe
                 }
                 else
-                    system("adb shell sendevent /dev/input/event3 3 003e 2"); //Dunno, somekind of swipe
+                    system("adb shell sendevent /dev/input/event3 3 003e 0"); //Dunno, somekind of swipe
             }
             system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
             i++;
