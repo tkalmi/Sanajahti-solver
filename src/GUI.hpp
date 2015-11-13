@@ -2,7 +2,6 @@
 #define GUI_H
 
 #define FONT "Lazy Opossum.ttf" // font that is used. Note that the font file should be in the same folder as caller
-#define VALID_CHARS L"abcdefghijklmnopqrstuvwxyzåäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ" // chars that are accepted
 #define PADDING 20 // how many pixels padding is 
 
 #include <SFML/Window.hpp>
@@ -89,16 +88,36 @@ private:
 };
 
 /****************************************************************************/
+/* Helper class for creating text labels without a specific background, such as titles and instructions */
+class TextLabel {
+public:
+	TextLabel(std::wstring content, std::string font_name, float x_pos, float y_pos, unsigned int char_size);
+	void draw(sf::RenderWindow &window);
+	void centerLabelX(float midPointX);
+	void fitLabelX(float containerXLimit);
+	void setColor(sf::Color newColor);
+	void setContent(std::wstring newContent);
+private:
+	std::wstring content;
+	sf::Font font;
+	float x;
+	float y;
+	unsigned int charSize;
+	sf::Color color = sf::Color::White;
+	sf::Text actualLabel;
+};
+
+/****************************************************************************/
 class GUI {
 public:
-	GUI(unsigned int width, unsigned int height, std::set<std::wstring> words) : width(width), height(height), words(words) {};
+	GUI(unsigned int width, unsigned int height, std::set<std::wstring> dictionary) : width(width), height(height), dictionary(dictionary) {};
 
 	int run();
 
 private:
 	unsigned int width;
 	unsigned int height; 
-	std::set<std::wstring> words;
+	std::set<std::wstring> dictionary;
 };
 
 #endif // GUI_H

@@ -42,13 +42,13 @@ private:
 /****************************************************************************/
 class SolveScreen : public Screen {
 public:
-	SolveScreen(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string, std::set<std::wstring> words) : M(M), N(N), matrix_as_string(matrix_as_string), words(words) {};
+	SolveScreen(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string, std::set<std::wstring> dictionary) : M(M), N(N), matrix_as_string(matrix_as_string), dictionary(dictionary) {};
 	virtual std::string Run(sf::RenderWindow &window);
 private:
 	unsigned int &M; // M-dimension of matrix
 	unsigned int &N; // N-dimension of matrix
 	std::wstring &matrix_as_string; 
-	std::set<std::wstring> words; // kotus-list
+	std::set<std::wstring> dictionary; // kotus-list or similar
 };
 
 #endif // SCREENS_H

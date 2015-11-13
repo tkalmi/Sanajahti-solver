@@ -318,6 +318,61 @@ std::wstring TextFieldMatrix::getAsString()
 }
 
 /****************************************************************************/
+TextLabel::TextLabel(std::wstring content, std::string font_name, float x_pos, float y_pos, unsigned int char_size)
+{
+	this->content = content;
+	this->charSize = char_size;
+	this->x = x_pos;
+	this->y = y_pos;
+	if (!font.loadFromFile(font_name)) {
+		// error...
+	}
+	actualLabel.setString(content);
+	actualLabel.setCharacterSize(charSize);
+	actualLabel.setPosition(x, y);
+	actualLabel.setColor(color);
+	actualLabel.setFont(font);
+}
+
+void TextLabel::draw(sf::RenderWindow &window)
+{
+	window.draw(actualLabel);
+}
+
+/* Sets the text label in the middle of the screen horizontally */
+void TextLabel::centerLabelX(float midPointX)
+{
+	sf::FloatRect bounds = actualLabel.getLocalBounds();
+	x = midPointX - bounds.width / 2.0f; 
+	actualLabel.setPosition( x, y );
+}
+
+/* Reduces the font size until the text label fits into the size given as a parameter */
+void TextLabel::fitLabelX(float containerXLimit)
+{
+	sf::FloatRect bounds = actualLabel.getLocalBounds();
+	while (x + bounds.width > containerXLimit)
+	{
+		// Adjust the font size
+		charSize--;
+		actualLabel.setCharacterSize(charSize);
+		bounds = actualLabel.getLocalBounds();
+	}
+}
+
+void TextLabel::setColor(sf::Color newColor)
+{
+	color = newColor;
+	actualLabel.setColor(color);
+}
+
+void TextLabel::setContent(std::wstring newContent)
+{
+	content = newContent;
+	actualLabel.setString(content);
+}
+
+/****************************************************************************/
 /* main loop for GUI*/
 int GUI::run()
 {
@@ -340,7 +395,7 @@ int GUI::run()
 	InputMatrix *s2 = new InputMatrix(M, N, matrix_as_string);
 	screens["input_matrix"] = s2;
 
-	SolveScreen *s3 = new SolveScreen(M, N, matrix_as_string, words);
+	SolveScreen *s3 = new SolveScreen(M, N, matrix_as_string, dictionary);
 	screens["solve_screen"] = s3;
 
 	// main run loop
