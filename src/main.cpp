@@ -11,13 +11,13 @@ int main(int argc, char **argv)
     setlocale(LC_ALL, "");
 
 
-    bool text_ui = false;
-    bool android_input = false;
-    bool with_paths = false;
+    bool text_ui = false; // Default is to use with GUI
+    bool android_input = false; // Also no inputing to Android
+    bool with_paths = false; // We do not print paths if we use GUI
     int options;
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
-    std::wstring matrix_as_string = L"uemnttikeaäthäpya";
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
+    std::wstring matrix_as_string;
     while ((options = getopt(argc, argv, "ac:pw:m:n:")) != -1) {
         switch(options) {
 	    case 'a':
@@ -84,19 +84,7 @@ int main(int argc, char **argv)
 	for (auto i : solver.Paths()) {
 		std::wcout << sj::utf8_to_wstring(i.path_str()) << std::endl;
 	}
+    solver.Android_Solve(720, 1280); // Speksattu toistaiseksi vilin S3:selle, lisätään resoluutioflagit
     }
-    //auto t = sj::create_matrix(4,5,L"homohomokäkihomohomo");
-    //auto k = sj::find_words(t,words);
-    //for (auto i : k){
-    //    std::wcout << i.w_word() << std::endl;
-    //}
-//
-//    GUI gui(960, 640, words);
- //   gui.run();
-    //sj::Solver k(words, "lpliaiagtuianioi",4,4);
-    //for (auto i : k.Paths()){
-    //    std::cout << i.path_str() << std::endl;
-    //}
-    //k.Android_Solve(720, 1280);
     return 0;
 }
