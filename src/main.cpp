@@ -5,9 +5,23 @@
 #include "GUI.hpp"
 #include "solver.hpp"
 
+#include <signal.h>
+
+static void handler(int signal)
+{
+
+switch (signal) {
+	case SIGINT: 
+	fprintf(stderr, "Caught interrupt signal \n");
+	break;
+}
+exit(signal);
+}
+
 //adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png
 int main(int argc, char **argv)
 {
+    signal(SIGINT, handler);
     setlocale(LC_ALL, "");
 
 
