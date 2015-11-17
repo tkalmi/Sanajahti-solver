@@ -10,24 +10,14 @@ std::string MainMenu::Run(sf::RenderWindow &window)
 {
 	/* COMPONENTS INIT */
 	// title for main menu
-	sf::Text title;
-	sf::Font font;
-	if (!font.loadFromFile(FONT)) {
-		// error...
-	}
-	title.setFont(font);
-	title.setColor(sf::Color::White);
-	title.setCharacterSize((unsigned int)(window.getSize().y / 8.0f)); 
-	title.setString("Sanajahti Solver");
-
-	// Get the size of the title
-	sf::FloatRect bounds = title.getLocalBounds();
-
-	// Center the title
-	title.setPosition(
-		(window.getSize().x / 2.0f - bounds.width / 2.0f),
-		(window.getSize().y / 40.0f)
+	TextLabel title(
+		L"Sanajahti Solver",
+		FONT,
+		0.0f,
+		(window.getSize().y / 40.0f),
+		(unsigned int)(window.getSize().y / 8.0f)
 		);
+	title.centerLabelX(window.getSize().x / 2.0f); // set title x position to middle of the screen
 	
 	// button for inputting own matrix
 	Button teeItse(
@@ -73,7 +63,7 @@ std::string MainMenu::Run(sf::RenderWindow &window)
 		window.clear(BACKGROUND_COLOR);
 		teeItse.draw(window);
 		android.draw(window);
-		window.draw(title);
+		title.draw(window);
 
 		window.display();
 	}
@@ -112,40 +102,24 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 		(unsigned int)(window.getSize().x / 20.0f),
 		"Takaisin"
 		); // button for going back
-
-	sf::Font font;
-	if (!font.loadFromFile(FONT)) {
-		// error...
-	}
-	sf::Text X; // x-operator in between M_field and N_field
+	TextLabel X(
+		L"x",
+		FONT,
+		0,
+		(unsigned int)window.getSize().y / 20.0f * 9.0f,
+		(unsigned int)(window.getSize().x / 20.0f)
+		); // multiplication operator in between the dimension fields
+	X.centerLabelX(window.getSize().x / 2.0f); // set the x position of X to the middle of the screen
 	X.setColor(sf::Color::Black);
-	X.setFont(font);
-	X.setString("x");
-	X.setCharacterSize((unsigned int)(window.getSize().x / 20.0f));
 
-	// Get the size of the X
-	sf::FloatRect bounds = X.getLocalBounds();
-
-	// center the X
-	X.setPosition(
-		(unsigned int)window.getSize().x / 2.0f - bounds.width / 2,
-		(unsigned int)window.getSize().y / 20.0f * 9.0f
-		);
-
-	sf::Text title; // title of screen
-	title.setFont(font);
-	title.setColor(sf::Color::White);
-	title.setCharacterSize((unsigned int)(window.getSize().y / 8.0f));
-	title.setString(L"Syötä matriisin mitat");
-
-	// Get the size of the title
-	bounds = title.getLocalBounds();
-
-	// Center the title
-	title.setPosition(
-		window.getSize().x / 2.0f - bounds.width / 2.0f,
-		window.getSize().y / 40.0f
-		);
+	TextLabel title(
+		L"Syötä matriisin mitat",
+		FONT,
+		0,
+		window.getSize().y / 40.0f,
+		(unsigned int)(window.getSize().y / 8.0f)
+		); // title of screen
+	title.centerLabelX(window.getSize().x / 2.0f); // set the x position of title to the middle of the screen
 
 	/* COMPONENTS END INIT */
 
@@ -246,8 +220,8 @@ std::string SizeQuery::Run(sf::RenderWindow &window)
 		N_field.draw(window);
 		jatka.draw(window);
 		takaisin.draw(window);
-		window.draw(X);
-		window.draw(title);
+		X.draw(window);
+		title.draw(window);
 		
 		window.display();
 	}
@@ -283,33 +257,14 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 		(unsigned int)(window.getSize().x / 20.0f),
 		"Ratkaise"
 		); // button for solving the matrix
-
-	sf::Font font;
-	if (!font.loadFromFile(FONT)) {
-		// error...
-	}
-	sf::Text instructions; // instructions for filling the matrix
-	instructions.setColor(sf::Color::White);
-	instructions.setFont(font);
-	instructions.setString(L"Täytä ruudukko kirjaimilla\nja paina ratkaise");
-	instructions.setCharacterSize((unsigned int)(window.getSize().x / 20.0f));
-
-	// Get the size of the instructions
-	sf::FloatRect bounds = instructions.getLocalBounds();
-
-	// center the instructions
-	instructions.setPosition(
+	TextLabel instructions(
+		L"Täytä ruudukko kirjaimilla\nja paina ratkaise",
+		FONT,
 		window.getSize().y - window.getSize().x / 20.0f + 2 * PADDING,
-		window.getSize().x / 20.0f + 2 * PADDING
-		);
-	// Fit the instructions to window
-	while (instructions.getPosition().x + bounds.width > window.getSize().x - PADDING)
-	{
-		// Adjust the font size
-		instructions.setCharacterSize(instructions.getCharacterSize() - 1);
-		bounds = instructions.getLocalBounds();
-	}
-
+		window.getSize().x / 20.0f + 2 * PADDING,
+		(unsigned int)(window.getSize().x / 20.0f)
+		); // instructions for filling the matrix
+	instructions.fitLabelX(window.getSize().x - PADDING); // make the label fit nicely to screen
 
 	/* COMPONENTS END INIT */
 
@@ -391,7 +346,7 @@ std::string InputMatrix::Run(sf::RenderWindow &window)
 		matrix.draw(window);
 		takaisin.draw(window);
 		ratkaise.draw(window);
-		window.draw(instructions);
+		instructions.draw(window);
 
 		window.display();
 	}
@@ -473,25 +428,12 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 		(unsigned int)(window.getSize().x / 20.0f),
 		"Seuraavat"
 		); // button for scrolling solved_list down
-
-
-	sf::Font font;
-	if (!font.loadFromFile(FONT)) {
-		// error...
-	}
-	sf::Text highlighted; // instructions for filling the matrix
-	highlighted.setColor(sf::Color::White);
-	highlighted.setFont(font);
-	highlighted.setString("");
-	highlighted.setCharacterSize((unsigned int)(window.getSize().x / 20.0f));
-
-	// Get the size of the instructions
-	sf::FloatRect bounds = highlighted.getLocalBounds();
-
-	// center the instructions
-	highlighted.setPosition(
+	TextLabel highlighted(
+		L"",
+		FONT,
 		window.getSize().y - window.getSize().x / 20.0f + 2 * PADDING,
-		PADDING
+		PADDING,
+		(unsigned int)(window.getSize().x / 20.0f)
 		);
 	/* COMPONENTS END INIT */
 
@@ -506,8 +448,8 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 	unsigned int roll_index = 0; // current index of the word highlighted by roll all
 
 	// solve the matrix
-	auto char_matrix = create_matrix(M, N, matrix_as_string);
-	std::vector<Path> solved_words = find_words(char_matrix, words);
+	sj::Solver solver(dictionary, matrix_as_string, M, N);
+	std::vector<Path> solved_words = solver.Paths();
 	std::vector<std::wstring> solved_words_string = getSolvedWordsAsStrings(solved_words);
 	unsigned int page_count_max = (unsigned int)ceil(solved_words_string.size() / (float)(2 * 15)); // how many pages there are
 
@@ -574,15 +516,8 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 							matrix.getTile(i).setInPath(true);
 						}
 
-						highlighted.setString(solved_words_string[index + 2 * 15 * page_count]); // write the selected word next to the matrix
-
-						// Fit the selected word to window
-						while (highlighted.getPosition().x + bounds.width > window.getSize().x * 11.0f / 12.0f - 2 * PADDING)
-						{
-							// Adjust the font size
-							highlighted.setCharacterSize(highlighted.getCharacterSize() - 1);
-							bounds = highlighted.getLocalBounds();
-						}
+						highlighted.setContent(solved_words_string[index + 2 * 15 * page_count]); // write the selected word next to the matrix
+						highlighted.fitLabelX(window.getSize().x * 11.0f / 12.0f - 2 * PADDING); // fit the selected word to window
 						roll_all_on = false; // cancel roll all if solved word is clicked
 						update_needed = true;
 					}
@@ -602,7 +537,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 		}
 
 		if (roll_all_on) { // show every path one at a time
-			if (clock.getElapsedTime().asSeconds() >= 3) { // show next path is second has elapsed
+			if (clock.getElapsedTime().asSeconds() >= 3.0f) { // show next path is second has elapsed
 				roll_index++;
 				if (roll_index < solved_words_string.size()) {
 					for (unsigned int i = 0; i < M * N; i++) { // clear old path
@@ -614,15 +549,8 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 						matrix.getTile(i).setInPath(true);
 					}
 
-					highlighted.setString(solved_words_string[roll_index]); // write the selected word next to the matrix
-
-					// Fit the selected word to window
-					while (highlighted.getPosition().x + bounds.width > window.getSize().x * 11.0f / 12.0f - 2 * PADDING)
-					{
-						// Adjust the font size
-						highlighted.setCharacterSize(highlighted.getCharacterSize() - 1);
-						bounds = highlighted.getLocalBounds();
-					}
+					highlighted.setContent(solved_words_string[roll_index]); // write the selected word next to the matrix
+					highlighted.fitLabelX(window.getSize().x * 11.0f / 12.0f - 2 * PADDING); // fit the selected word to window
 
 					roll_index++;
 					clock.restart();
@@ -631,7 +559,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 					for (unsigned int i = 0; i < M * N; i++) { // clear old path
 						matrix.getTile(i).setInPath(false);
 					}
-					highlighted.setString(""); // empty the highlighted string
+					highlighted.setContent(L""); // empty the highlighted string
 					roll_all_on = false;
 				}
 			}
@@ -647,7 +575,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 			solved_list.draw(window);
 			up.draw(window);
 			down.draw(window);
-			window.draw(highlighted);
+			highlighted.draw(window);
 
 			window.display();
 
