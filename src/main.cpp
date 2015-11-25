@@ -25,38 +25,62 @@ int main(int argc, char **argv)
     signal(SIGINT, handler);
     setlocale(LC_ALL, "");
     setlocale(LC_NUMERIC, "C");
-
+//Settings
     bool text_ui = false; // Default is to use with GUI
     bool android_input = false; // Also no inputing to Android
     bool with_paths = false; // We do not print paths if we use GUI
+   
+    std::string str; //Luvut // Apumuuttujia optioon -m
+    bool loytyy_x = false;
+    
     int options;
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
     std::wstring matrix_as_string;
-    while ((options = getopt(argc, argv, "ac:pw:m:n:o")) != -1) {
+    while ((options = getopt(argc, argv, "ac:pw:m:o")) != -1) {
         switch(options) {
-	    case 'a':
+	    case 'a': // Android support
 		android_input = true;
 		break;
-            case 'c':
+            case 'c': // Disabling GUI, printing to shell.
 		matrix_as_string = sj::utf8_to_wstring(optarg);
 		text_ui = true;
                 break;
-     	    case 'p':
+     	    case 'p': // Printing words paths as well
 		with_paths = true;
 		break;
-            case 'w':
+            case 'w': // Defining other wordlist to be used.
                 filename = optarg;
                 std::wcout << L"filename: " << sj::utf8_to_wstring(filename) << std::endl; // Jotain hämärää, hävittää ääkköset. Testaa ./main -c 1 ja sen jälkeen ./main -c 1 -w sanat.txt
                 break;
             case 'm':
-                M = atoi(optarg); // Täytyy kattoa toimiiko char * kanssa, vai vaatiiko \0:n
-                break;
-            case 'n':
-                N = atoi(optarg);
+                if (optarg[0] == '0' || optarg[0] == 'x') {
+                    fprintf(stderr,"Option -m input format is: MxN, for example 4x4\n");
+                    return 1;
+                }
+                for (unsigned int i = 0; i < strlen(optarg); i++) {
+                    if (optarg[i] == 'x') {
+                        if (loytyy_x) {// For double 'x's, for example 4x4x4 not allowed
+                            fprintf(stderr, "Only 2d matrixes are supported, sorry.\n");
+                            return 1;
+                        }
+                        loytyy_x = true;
+                        M = std::stoi (str);
+                        str.erase();
+                        continue;
+                    }
+                    str.push_back(optarg[i]);
+                }
+                N = std::stoi (str);
+                if (!loytyy_x) {
+                    fprintf(stderr, "Option -m input format is: MxN, for example 4x4\n");
+                    return 1;
+                }
+                fprintf(stderr,"M: %d, N: %d\n",M,N);
                 break;
             case 'o':
                 ocr();
+                return 2;
                 break;
             case '?':
                 if (optopt == 'c')

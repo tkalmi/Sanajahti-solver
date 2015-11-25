@@ -3,7 +3,7 @@
 
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
-
+#include <iostream>
 
 // Just testing 
 
