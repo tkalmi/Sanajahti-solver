@@ -10,7 +10,6 @@
 static void handler(int signal)
 //adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png
 {
-
 switch (signal) {
 	case SIGINT: 
 	fprintf(stderr, "Caught interrupt signal \n");
