@@ -1,25 +1,27 @@
 #include "ocr.hpp"
 
-std::string ocr();
+std::string ocr()
 {
     int res_x = 1080;
     int res_y = 1920;
     
-    int x_offset = res_x/8.3721;
-    int y_offset = res_y/2.4903;
+    int x_offset = res_x/8.3721; // 130 on fullHD
+    int y_offset = res_y/2.56; // 750 on fullHD
     int tile_size_x = res_x/8.4375;
-    int tile_size_y = res_y/21.099;
+    int tile_size_y = res_y/16;
     int tile_offset = res_x/4.6956;
     char *outText;
     
     std::string luettu;
-    
+
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
     // Initialize tesseract-ocr with English, without specifying tessdata path
-    if (api->Init(NULL, "eng")) {
+    if (api->Init("/usr/share/tesseract-ocr", "fin")) {
         fprintf(stderr, "Could not initialize tesseract.\n");
         exit(1);
     }
+    api->ReadConfigFile("tess_config");
+    api->SetPageSegMode(tesseract::PSM_SINGLE_CHAR);
 
     // Open input image with leptonica library
     Pix *image = pixRead("scrot.png");
@@ -33,7 +35,6 @@ std::string ocr();
         luettu.push_back(*outText);
         }  
     }
-    std::cout << luettu << std::endl;
     // Destroy used object and release memory
     api->End();
     delete [] outText;

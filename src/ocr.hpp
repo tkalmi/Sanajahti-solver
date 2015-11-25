@@ -2,12 +2,14 @@
 #define OCR_HPP
 
 #include <tesseract/baseapi.h>
+#include <tesseract/publictypes.h>
 #include <leptonica/allheaders.h>
+#include <tesseract/genericvector.h>
 #include <iostream>
 
 // Just testing 
 
-int ocr();
+std::string ocr();
 
 // TODO
 
