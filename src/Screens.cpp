@@ -484,6 +484,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 				if (roll.isInside(sf::Mouse::getPosition(window))) { // user clicked "roll all"
 					roll_index = 0;
 					roll_all_on = true;
+					solved_list.getSelectedTile().setSelected(false);
 					clock.restart();
 				}
 				if (up.isInside(sf::Mouse::getPosition(window))) { // user clicked "edelliset"
@@ -537,8 +538,8 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 		}
 
 		if (roll_all_on) { // show every path one at a time
-			if (clock.getElapsedTime().asSeconds() >= 3.0f) { // show next path is second has elapsed
-				roll_index++;
+			if (clock.getElapsedTime().asSeconds() >= 1.0f) { // show next path is second has elapsed
+				update_needed = true;
 				if (roll_index < solved_words_string.size()) {
 					for (unsigned int i = 0; i < M * N; i++) { // clear old path
 						matrix.getTile(i).setInPath(false);
