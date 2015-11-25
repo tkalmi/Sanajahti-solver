@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "GUI.hpp"
 #include "solver.hpp"
+#include "ocr.hpp"
 
 #include <signal.h>
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv)
 {
     signal(SIGINT, handler);
     setlocale(LC_ALL, "");
-
+    setlocale(LC_NUMERIC, "C");
 
     bool text_ui = false; // Default is to use with GUI
     bool android_input = false; // Also no inputing to Android
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
     std::wstring matrix_as_string;
-    while ((options = getopt(argc, argv, "ac:pw:m:n:")) != -1) {
+    while ((options = getopt(argc, argv, "ac:pw:m:n:o")) != -1) {
         switch(options) {
 	    case 'a':
 		android_input = true;
@@ -53,6 +54,9 @@ int main(int argc, char **argv)
                 break;
             case 'n':
                 N = atoi(optarg);
+                break;
+            case 'o':
+                ocr();
                 break;
             case '?':
                 if (optopt == 'c')
@@ -95,10 +99,7 @@ int main(int argc, char **argv)
     }
     if (android_input == true) {
 	sj::Solver solver(words, matrix_as_string, M, N);
-	for (auto i : solver.Paths()) {
-		std::wcout << sj::utf8_to_wstring(i.path_str()) << std::endl;
-	}
-    solver.Android_Solve(720, 1280); // Speksattu toistaiseksi vilin S3:selle, lisätään resoluutioflagit
+        solver.Android_Solve(720, 1280); // Speksattu toistaiseksi vilin S3:selle, lisätään resoluutioflagit
     }
     return 0;
 }
