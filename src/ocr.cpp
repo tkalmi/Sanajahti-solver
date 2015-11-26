@@ -8,7 +8,7 @@ std::string ocr()
     int x_offset = res_x/8.3721; // 130 on fullHD
     int y_offset = res_y/2.56; // 750 on fullHD
     int tile_size_x = res_x/8.4375;
-    int tile_size_y = res_y/16;
+    int tile_size_y = res_y/17.3;
     int tile_offset = res_x/4.6956;
     char *outText;
     
@@ -16,7 +16,7 @@ std::string ocr()
 
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
     // Initialize tesseract-ocr with English, without specifying tessdata path
-    if (api->Init("/usr/share/tesseract-ocr", "fin")) {
+    if (api->Init(NULL, "fin")) {
         fprintf(stderr, "Could not initialize tesseract.\n");
         exit(1);
     }
