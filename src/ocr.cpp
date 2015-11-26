@@ -5,11 +5,11 @@ std::string ocr()
     int res_x = 1080;
     int res_y = 1920;
     
-    int x_offset = res_x/8.3721; // 130 on fullHD
-    int y_offset = res_y/2.56; // 750 on fullHD
-    int tile_size_x = res_x/8.4375;
-    int tile_size_y = res_y/17.3;
-    int tile_offset = res_x/4.6956;
+    int x_offset = res_x/8.3721; // 129 on fullHD
+    int y_offset = res_y/2.56; // 751 on fullHD
+    int tile_size_x = res_x/8.4375; // 128
+    int tile_size_y = res_y/17.455; // 110
+    int tile_offset = res_x/4.6956; //230
     char *outText;
     
     std::string luettu;

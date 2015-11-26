@@ -27,7 +27,6 @@ int main(int argc, char **argv)
 {
     signal(SIGINT, handler);
     setlocale(LC_ALL, "");
-    setlocale(LC_NUMERIC, "C");
 //Settings
     bool text_ui = false; // Default is to use with GUI
     bool ocr_on = false;
@@ -84,6 +83,7 @@ int main(int argc, char **argv)
                 fprintf(stderr,"M: %d, N: %d\n",M,N);
                 break;
             case 'o':
+ 		setlocale(LC_NUMERIC, "C");
 		ocr_on = true;
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
                 matrix_as_string = sj::utf8_to_wstring(ocr());
@@ -93,7 +93,8 @@ int main(int argc, char **argv)
 			std::wcout << std::endl;
 		}
 //		std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
-                break;
+		setlocale(LC_ALL, "");
+		break;
             case '?':
                 if (optopt == 'c')
                     fprintf(stderr, "Option -%c requires an argument.\n", optopt);
