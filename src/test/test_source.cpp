@@ -1,18 +1,16 @@
 #include <gtest/gtest.h> //GoogleTest libraries
-#include <iostream>
-#include <vector>
+#include "../GUI.hpp"
+#include "../solver.hpp"
 
 /*
  * TODO:
- * make the tests
+ * Code the tests
  */
-TEST(TESTNAME, WHATTOTEST){ //Replace TESTNAME and WHATTOTEST with the correct equivalents
-    EXPECT_EQ(2,2); // Replace this
-    EXPECT_EQ("anything", "anything"); // Replace this
-    EXPECT_TRUE(true); // Replace this
+TEST(Testin_nimi, Mita_testataan){ //Replace the parameters with the correct equivalents
+    EXPECT_EQ(2, 2); // Replace this
+    EXPECT_EQ("anything", "something else"); // And this
 }
 
-GTEST_API_ int main(int argc, char **argv){
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+TEST(Toinen_testi, Jotain_testattavaa){ //Replace the parameters with the correct equivalents
+    EXPECT_TRUE(false); // Replace this
 }

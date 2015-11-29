@@ -63,11 +63,11 @@ gtest_main.a : gtest-all.o gtest_main.o
 # function.
 
 
-main.o : $(USER_DIR)/main.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cpp
+main.o : $(TEST_DIR)/main.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/main.cpp
 
-test_source.o : $(TEST_DIR)/test/test_source.cpp 
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test/test_source.cpp
+test_source.o : $(TEST_DIR)/test_source.cpp 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_source.cpp
 
-files_test : main.o test_source.o gtest_main.a
+solver_test : main.o test_source.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
