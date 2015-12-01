@@ -2,6 +2,7 @@
 #define SCREENS_H
 
 #include "GUI.hpp"
+#include <thread>
 
 /****************************************************************************/
 /* Virtual class for all different screens (main menu, matrice input screen, etc.) */

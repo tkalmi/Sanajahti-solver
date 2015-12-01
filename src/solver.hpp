@@ -11,7 +11,7 @@
 #include <string>
 
 namespace sj{
-    
+
 class Tile {
 public:
     /* Description:
@@ -137,6 +137,12 @@ public:
      */
     void Android_Solve(int x_size, int y_size);
     
+    /*
+     * Controls whether the Android Solver is allowed to run
+     */
+    void setAndroidSolverState(bool new_state) { this->android_solver_running = new_state; };
+    bool getAndroidSolverState() { return this->android_solver_running; };
+    
     
 private:
     /*
@@ -218,6 +224,7 @@ private:
     std::vector<Path> word_paths;
     std::vector<std::vector<Tile>> tile_matrix;
     std::set<std::wstring> dict;
+    bool android_solver_running = true; // initially true, so the command line version can use Android Solver smoothly.
 };
 std::wstring utf8_to_wstring(const std::string& str);
 std::string utf8_to_string(const std::wstring& str);

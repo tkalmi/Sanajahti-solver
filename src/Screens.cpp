@@ -374,6 +374,7 @@ std::vector<unsigned int> getPathAsIndices(Path path, unsigned int M) {
 }
 
 /****************************************************************************/
+
 std::string SolveScreen::Run(sf::RenderWindow &window) 
 {
 	/* COMPONENTS INIT */
@@ -408,12 +409,19 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 		"Main Menu"
 		); // button for returning to main menu
 	ButtonTitleInside roll(
-		(unsigned int)(window.getSize().x - 2 * (window.getSize().x / 12.0f + PADDING)),
+		(unsigned int)(window.getSize().y - window.getSize().x / 20.0f) + window.getSize().x / 12.0f + 3 * PADDING,
 		(unsigned int)(window.getSize().y - window.getSize().x / 20.0f - PADDING),
-		(unsigned int)(window.getSize().x / 12.0f),
+		(unsigned int)(window.getSize().x - window.getSize().x / 6.0f - 5 * PADDING - window.getSize().y + window.getSize().x / 20.0f),
 		(unsigned int)(window.getSize().x / 20.0f),
 		"Roll All"
 		); // button for showing each solved word's path graphically, one at a time
+	ButtonTitleInside android(
+		(unsigned int)(window.getSize().y - window.getSize().x / 20.0f) + 2 * PADDING,
+		(unsigned int)(window.getSize().y - window.getSize().x / 20.0f - PADDING),
+		(unsigned int)(window.getSize().x / 12.0f),
+		(unsigned int)(window.getSize().x / 20.0f),
+		"Android"
+		); // button for sending solutions to connected Android phone
 	ButtonTitleInside up(
 		(unsigned int)(window.getSize().y - window.getSize().x / 20.0f) + 2 * PADDING,
 		(unsigned int)(window.getSize().x / 20.0f) + 2 * PADDING,
@@ -449,6 +457,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 
 	// solve the matrix
 	sj::Solver solver(dictionary, matrix_as_string, M, N);
+	solver.setAndroidSolverState(false);
 	std::vector<Path> solved_words = solver.Paths();
 	std::vector<std::wstring> solved_words_string = getSolvedWordsAsStrings(solved_words);
 	unsigned int page_count_max = (unsigned int)ceil(solved_words_string.size() / (float)(2 * 15)); // how many pages there are
@@ -473,14 +482,31 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 				roll.isInside(sf::Mouse::getPosition(window));
 				up.isInside(sf::Mouse::getPosition(window));
 				down.isInside(sf::Mouse::getPosition(window));
+				android.isInside(sf::Mouse::getPosition(window));
 				update_needed = true;
 			}
 			/* user clicked */
 			if (event.type == sf::Event::MouseButtonPressed) {
-				if (takaisin.isInside(sf::Mouse::getPosition(window))) // user clicked "takaisin"
+				if (takaisin.isInside(sf::Mouse::getPosition(window))) { // user clicked "takaisin"
+					solver.setAndroidSolverState(false);
 					return "input_matrix";
-				if (menu.isInside(sf::Mouse::getPosition(window))) // user clicked "main menu"
+				}
+				if (menu.isInside(sf::Mouse::getPosition(window))) { // user clicked "main menu"
+					solver.setAndroidSolverState(false);
 					return "main_menu";
+				}
+				if (android.isInside(sf::Mouse::getPosition(window))) { // user clicked "android"
+					if (M == 4 && N == 4) { // check that matrix is 4x4
+						if (solver.getAndroidSolverState()) {
+							solver.setAndroidSolverState(false);
+						}
+						else {
+							solver.setAndroidSolverState(true);
+							std::thread thread(&Solver::Android_Solve, &solver, 720, 1280); // fixed screen resolution
+							thread.detach();
+						}
+					}
+				}
 				if (roll.isInside(sf::Mouse::getPosition(window))) { // user clicked "roll all"
 					roll_index = 0;
 					roll_all_on = true;
@@ -525,6 +551,11 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 				}
 			}
 		}
+		// set an appropriate title for the android solver -button
+		if (solver.getAndroidSolverState())
+			android.setTitle("Stop");
+		else
+			android.setTitle("Android");
 
 		// fill solved list with found words
 		if (page_count_changed) {
@@ -577,6 +608,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 			up.draw(window);
 			down.draw(window);
 			highlighted.draw(window);
+			android.draw(window);
 
 			window.display();
 

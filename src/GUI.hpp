@@ -32,6 +32,7 @@ public:
 	ButtonTitleInside(unsigned int x, unsigned int y, unsigned int width, unsigned int height, std::string title) : x(x), y(y), width(width), height(height), title(title) {};
 	void draw(sf::RenderWindow &window);
 	bool isInside(sf::Vector2i mouse_pos);
+	void setTitle(std::string new_title);
 private:
 	unsigned int x; // x-coordinate of position
 	unsigned int y; // y-coordinate of position

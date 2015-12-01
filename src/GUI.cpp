@@ -66,6 +66,11 @@ bool ButtonTitleInside::isInside(sf::Vector2i mouse_pos)
 	return false;
 }
 
+void ButtonTitleInside::setTitle(std::string new_title)
+{
+	this->title = new_title;
+}
+
 void ButtonTitleInside::draw(sf::RenderWindow &window) {
 	sf::RectangleShape button(sf::Vector2f((float)width, (float)height)); // button is a rectangle
 	button.setPosition(sf::Vector2f((float)x, (float)y));

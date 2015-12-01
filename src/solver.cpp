@@ -111,6 +111,8 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
         system("adb shell sendevent /dev/input/event3 3 48 3"); // ABS_MT_TOUCH_MAJOR
         
         for (auto path : word.path()){
+        	if (!android_solver_running)
+        		return;
             ss << "adb shell sendevent /dev/input/event3 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
             system(ss.str().c_str());
             ss.str("");
@@ -132,6 +134,7 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
         system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
         ss.str("");
     }
+    this->setAndroidSolverState(false);
 }
 
 std::vector<Path> sj::Solver::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::wstring> dictionary) {
