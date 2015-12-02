@@ -1,3 +1,5 @@
+#Please note this path as most of the errors may occur because
+#the gtest folder cannot be found or it's not the correct version (1.7.0)
 GTEST_DIR = $(HOME)/gtest-1.7.0
 
 # Where to find user code.
@@ -28,11 +30,6 @@ all : $(TESTS)
 clean :
 	rm -f $(TESTS) gtest.a gtest_main.a *.o
 
-#get-points :
-#	./files_test --gtest_output="xml:./tmc_test_results.xml" > /dev/null 2>&1; ./gen_points.sh
-
-#run: files_test
-#	./files_test --gtest_output="xml:./tmc_test_results.xml" 2> /dev/null; true
 
 # Builds gtest.a and gtest_main.a.
 
@@ -62,7 +59,8 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 
-
+#Note that the main class here is not the project's actual main
+#but own main class that the tests use
 main.o : $(TEST_DIR)/main.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/main.cpp
 
