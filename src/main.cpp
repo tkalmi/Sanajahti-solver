@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
     std::wstring matrix_as_string;
-    while ((options = getopt(argc, argv, "ac:pw:m:o::")) != -1) {
+    while ((options = getopt(argc, argv, "ac:pw:m:o::l")) != -1) {
         switch(options) {
 	    case 'a': // Android support
 		android_input = true;
@@ -96,6 +96,20 @@ int main(int argc, char **argv)
 //		std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
 		setlocale(LC_ALL, ""); // Needed for chars to work
 		break;
+	   case 'l': // Android testing
+                setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
+                ocr_on = true;
+//                system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
+                matrix_as_string = sj::utf8_to_wstring(ocr(res_x, res_y));
+                for (unsigned int i = 0; i < 16; i++) {
+                std::wcout << matrix_as_string[i];
+                if ((i+1) % 4 == 0)
+                        std::wcout << std::endl;
+                }
+//              std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
+                setlocale(LC_ALL, ""); // Needed for chars to work
+                break;
+		
             case '?':
                 if (optopt == 'c')
                     fprintf(stderr, "Option -%c requires an argument.\n", optopt);
