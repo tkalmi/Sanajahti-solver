@@ -64,8 +64,11 @@ gtest_main.a : gtest-all.o gtest_main.o
 main.o : $(TEST_DIR)/main.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/main.cpp
 
+solver.o : $(USER_DIR)/solver.cpp $(USER_DIR)/solver.hpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solver.cpp
+
 test_source.o : $(TEST_DIR)/test_source.cpp 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_source.cpp
 
-solver_test : main.o test_source.o gtest_main.a
+solver_test : main.o test_source.o solver.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
