@@ -14,7 +14,21 @@
 
 // Just testing 
 
-std::string ocr(int res_x, int res_y, std::string filu);
+    /*
+     * Creates a matrix string for the solver from screenshot of Sanajahti.
+     * Returns std::string from the characters read. 
+     * Parameters:
+     * filu : filename of our screenshot.png 
+     */
+
+std::string ocr(std::string filu);
+
+    /*
+     * Creates a pair of width and height of our image file.
+     * Returns a pair
+     * Parameters:
+     * filu : the filename where to fetch resolution data. 
+     */
 
 std::pair<int, int> get_res(std::string filu);
 

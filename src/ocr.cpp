@@ -1,8 +1,11 @@
 #include "ocr.hpp"
 
-std::string ocr(int res_x, int res_y, std::string filu = "scrot.png")
+std::string ocr(std::string filu)
 {
-    
+    std::pair<int,int> res;
+    res = get_res(filu);
+    int res_x = res.first;
+    int res_y = res.second;
     int x_offset, y_offset;
 
     if (res_x == 1080) { // Honor 7 with the virtual buttons bar
@@ -31,7 +34,11 @@ std::string ocr(int res_x, int res_y, std::string filu = "scrot.png")
 
     // Open input image with leptonica library
     Pix *image = pixRead(filu.c_str());
-    api->SetImage(image);
+    if (image == NULL) {
+	fprintf(stderr, "The file %s could not be read.\n",filu.c_str());
+	exit(1);
+    }    
+api->SetImage(image);
 
     // Get OCR result
     for (unsigned int j = 0; j < 4 ; j++) {
