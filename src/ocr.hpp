@@ -6,10 +6,14 @@
 #include <leptonica/allheaders.h>
 #include <tesseract/genericvector.h>
 #include <iostream>
+#include <algorithm>
+#include "solver.hpp"
 
 // Just testing 
 
 std::string ocr(int res_x, int res_y);
+
+std::pair<int, int> get_res();
 
 // TODO
 

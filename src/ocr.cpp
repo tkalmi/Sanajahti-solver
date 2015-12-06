@@ -3,8 +3,10 @@
 std::string ocr(int res_x, int res_y)
 {
     
-    int x_offset = res_x/9; // 129 on fullHD, 8.3721
-    int y_offset = res_y/2.3659; // 751 on fullHD
+//    int x_offset = res_x/9; // 129 on fullHD, 8.3721
+//    int y_offset = res_y/2.3659; // 751 on fullHD
+    int x_offset = res_x/8.3721;
+    int y_offset = res_y/2.56;
     int tile_size_x = res_x/8.4375; // 128
     int tile_size_y = res_y/17.455; // 110
     int tile_offset = res_x/4.6956; //230
@@ -14,7 +16,7 @@ std::string ocr(int res_x, int res_y)
 
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
     // Initialize tesseract-ocr with English, without specifying tessdata path
-    if (api->Init(NULL, "fin")) {
+    if (api->Init(NULL, "fra")) {
         fprintf(stderr, "Could not initialize tesseract.\n");
         exit(1);
     }
@@ -30,12 +32,18 @@ std::string ocr(int res_x, int res_y)
         for (unsigned int i = 0; i < 4; i++) {
         api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset, tile_size_x, tile_size_y);
         outText = api->GetUTF8Text();
-        luettu.push_back(*outText);
+	luettu.push_back(*outText);
         }  
     }
     // Destroy used object and release memory
     api->End();
     delete [] outText;
     pixDestroy(&image);
+//    std::replace(luettu.begin(), luettu.end(), ' ', 'p');
     return luettu;
+}
+
+std::pair<int, int> get_res() { //TODO
+	std::pair<int, int> s (1,1);
+	return s;
 }

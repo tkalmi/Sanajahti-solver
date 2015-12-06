@@ -5,6 +5,7 @@
 #include "GUI.hpp"
 #include "solver.hpp"
 #include "ocr.hpp"
+#include <algorithm>
 
 #include <signal.h>
 
@@ -19,8 +20,8 @@ switch (signal) {
 exit(signal);
 }
 
-int res_x = 720;
-int res_y = 1280;
+int res_x = 1080;
+int res_y = 1920;
 int event_num = 3;
 
 //adb shell screencap -p /tmp/scrot.png && adb pull /tmp/scrot.png");
