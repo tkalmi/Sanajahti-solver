@@ -105,10 +105,10 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
     std::stringstream ss;
     int i = 0;
     for (auto word : word_paths){
-        ss << "adb shell sendevent /dev/input/event3 3 57 " << i; //ABS_MT_TRACKING_ID
+        ss << "adb shell sendevent /dev/input/event1 3 57 " << i; //ABS_MT_TRACKING_ID
         system(ss.str().c_str());
         ss.str("");
-        system("adb shell sendevent /dev/input/event3 3 48 3"); // ABS_MT_TOUCH_MAJOR
+        system("adb shell sendevent /dev/input/event6 3 48 3"); // ABS_MT_TOUCH_MAJOR
         
         for (auto path : word.path()){
         	if (!android_solver_running)
@@ -116,22 +116,22 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
             ss << "adb shell sendevent /dev/input/event3 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
             system(ss.str().c_str());
             ss.str("");
-            ss << "adb shell sendevent /dev/input/event3 3 54 " << path.y() * offset + y_base_offset; //ABS_MT_POSITION_Y
+            ss << "adb shell sendevent /dev/input/event6 3 54 " << path.y() * offset + y_base_offset; //ABS_MT_POSITION_Y
             system(ss.str().c_str());
             ss.str("");
             if (i > 0){
                 if( i % 2 == 0){
-                    system("adb shell sendevent /dev/input/event3 3 003e 2"); //Dunno, somekind of swipe
+                    system("adb shell sendevent /dev/input/event6 3 003e 2"); //Dunno, somekind of swipe
                 }
                 else
-                    system("adb shell sendevent /dev/input/event3 3 003e 0"); //Dunno, somekind of swipe
+                    system("adb shell sendevent /dev/input/event6 3 003e 0"); //Dunno, somekind of swipe
             }
-            system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
+            system("adb shell sendevent /dev/input/event6 0 0 0"); //SYN_REPORT
             i++;
         }
         i = 0;
-        system("adb shell sendevent /dev/input/event3 3 57 4294967295"); // ABS_MT_TRACKING_ID
-        system("adb shell sendevent /dev/input/event3 0 0 0"); //SYN_REPORT
+        system("adb shell sendevent /dev/input/event6 3 57 4294967295"); // ABS_MT_TRACKING_ID
+        system("adb shell sendevent /dev/input/event6 0 0 0"); //SYN_REPORT
         ss.str("");
     }
     this->setAndroidSolverState(false);

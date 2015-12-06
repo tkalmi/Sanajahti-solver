@@ -1,0 +1,3 @@
+load_system_dawg F
+load_freq_dawg F
+tessedit_char_whitelist QWERTYUIOPÅASDFGHJKLÖÄZCVBNM
