@@ -20,9 +20,9 @@ switch (signal) {
 exit(signal);
 }
 
-int res_x = 1080;
-int res_y = 1920;
-int event_num = 3;
+int res_x = 10; // Obsolete, will be read from the file
+int res_y = 120; // 
+int event_num = 3; //
 
 //adb shell screencap -p /tmp/scrot.png && adb pull /tmp/scrot.png");
 int main(int argc, char **argv)
@@ -41,6 +41,9 @@ int main(int argc, char **argv)
     int options;
     int M = 4, N = 4; //Matrix dimensions, default is 4x4 as defined by Sanajahti.
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
+    std::string ocr_filename = "scrot.png"; // default image file (PNG) to be used with OCR-library.
+    std::pair<int,int> res;
+
     std::wstring matrix_as_string;
     while ((options = getopt(argc, argv, "ac:pw:m:o::l")) != -1) {
         switch(options) {
@@ -88,7 +91,8 @@ int main(int argc, char **argv)
  		setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
 		ocr_on = true;
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-                matrix_as_string = sj::utf8_to_wstring(ocr(res_x, res_y));
+		res = get_res(ocr_filename);
+		matrix_as_string = sj::utf8_to_wstring(ocr(res.first, res.second, ocr_filename));
 		for (unsigned int i = 0; i < 16; i++) {
 		std::wcout << matrix_as_string[i];
 		if ((i+1) % 4 == 0)
@@ -97,11 +101,11 @@ int main(int argc, char **argv)
 //		std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
 		setlocale(LC_ALL, ""); // Needed for chars to work
 		break;
-	   case 'l': // Android testing
-                setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
+	   case 'l': // Android testing. Debugging purposes
+		setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
                 ocr_on = true;
 //                system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-                matrix_as_string = sj::utf8_to_wstring(ocr(res_x, res_y));
+                matrix_as_string = sj::utf8_to_wstring(ocr(res_x, res_y, ocr_filename));
                 for (unsigned int i = 0; i < 16; i++) {
                 std::wcout << matrix_as_string[i];
                 if ((i+1) % 4 == 0)
