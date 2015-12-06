@@ -1,8 +1,8 @@
 CC=g++
-CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic $(INC)
-LIBS=-lsfml-graphics -lsfml-window -lsfml-system
-SOURCES=main.cpp solver.cpp solver.hpp GUI.hpp GUI.cpp Screens.hpp Screens.cpp
-OBJECTS=main.o solver.o GUI.o Screens.o
+CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
+LIBS=-lsfml-graphics -lsfml-window -lsfml-system -llept -ltesseract
+SOURCES=main.cpp solver.cpp solver.hpp GUI.hpp GUI.cpp Screens.hpp Screens.cpp ocr.cpp ocr.hpp
+OBJECTS=main.o solver.o GUI.o Screens.o ocr.o
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
