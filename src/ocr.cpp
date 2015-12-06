@@ -1,9 +1,7 @@
 #include "ocr.hpp"
 
-std::string ocr()
+std::string ocr(int res_x, int res_y)
 {
-    int res_x = 1080;
-    int res_y = 1920;
     
     int x_offset = res_x/8.3721; // 129 on fullHD
     int y_offset = res_y/2.56; // 751 on fullHD

@@ -9,7 +9,7 @@
 
 // Just testing 
 
-std::string ocr();
+std::string ocr(int res_x, int res_y);
 
 // TODO
 

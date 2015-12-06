@@ -98,14 +98,15 @@ std::vector<Path> sj::Solver::Paths(){
 }
 
 
-void sj::Solver::Android_Solve(int x_size, int y_size){
+void sj::Solver::Android_Solve(int x_size, int y_size, int event_num = 3){
     int x_base_offset = x_size / 5.538;
     int y_base_offset = y_size / 2.184;
     int offset = x_size / 4.675;
     std::stringstream ss;
+    std::stringstream temp;
     int i = 0;
     for (auto word : word_paths){
-        ss << "adb shell sendevent /dev/input/event1 3 57 " << i; //ABS_MT_TRACKING_ID
+        ss << "adb shell sendevent /dev/input/event" << event_num << " 3 57 " << i; //ABS_MT_TRACKING_ID
         system(ss.str().c_str());
         ss.str("");
         system("adb shell sendevent /dev/input/event6 3 48 3"); // ABS_MT_TOUCH_MAJOR
@@ -113,25 +114,34 @@ void sj::Solver::Android_Solve(int x_size, int y_size){
         for (auto path : word.path()){
         	if (!android_solver_running)
         		return;
-            ss << "adb shell sendevent /dev/input/event3 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
+            ss << "adb shell sendevent /dev/input/event" << event_num << " 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
             system(ss.str().c_str());
             ss.str("");
-            ss << "adb shell sendevent /dev/input/event6 3 54 " << path.y() * offset + y_base_offset; //ABS_MT_POSITION_Y
+            ss << "adb shell sendevent /dev/input/event" << event_num << " 3 54 " << path.y() * offset + y_base_offset; //ABS_MT_POSITION_Y
             system(ss.str().c_str());
             ss.str("");
             if (i > 0){
                 if( i % 2 == 0){
-                    system("adb shell sendevent /dev/input/event6 3 003e 2"); //Dunno, somekind of swipe
+                    temp << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 2";
+                    system(temp.str().c_str()); //Dunno, somekind of swipe
                 }
-                else
-                    system("adb shell sendevent /dev/input/event6 3 003e 0"); //Dunno, somekind of swipe
+                else {
+                    temp << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 0";
+                    system(temp.str().c_str()); //Dunno, somekind of swipe
+                }
             }
-            system("adb shell sendevent /dev/input/event6 0 0 0"); //SYN_REPORT
+            temp.str("");
+            temp << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
+            system(temp.str().c_str()); //SYN_REPORT
+            temp.str("");
             i++;
         }
         i = 0;
-        system("adb shell sendevent /dev/input/event6 3 57 4294967295"); // ABS_MT_TRACKING_ID
-        system("adb shell sendevent /dev/input/event6 0 0 0"); //SYN_REPORT
+        temp << "adb shell sendevent /dev/input/event" << event_num << " 3 57 4294967295";
+        system(temp.str().c_str()); // ABS_MT_TRACKING_ID
+        temp.str("");
+        temp << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
+        system(temp.str().c_str()); //SYN_REPORT
         ss.str("");
     }
     this->setAndroidSolverState(false);

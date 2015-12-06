@@ -19,8 +19,9 @@ switch (signal) {
 exit(signal);
 }
 
-int res_x = 1080;
-int res_y = 1920;
+int res_x = 720;
+int res_y = 1280;
+int event_num = 3;
 
 //adb shell screencap -p /tmp/scrot.png && adb pull /tmp/scrot.png");
 int main(int argc, char **argv)
@@ -57,7 +58,7 @@ int main(int argc, char **argv)
                 filename = optarg;
                 std::wcout << L"filename: " << sj::utf8_to_wstring(filename) << std::endl; // Jotain hämärää, hävittää ääkköset. Testaa ./main -c 1 ja sen jälkeen ./main -c 1 -w sanat.txt
                 break;
-            case 'm':
+            case 'm': // Matrix input, input as MxN with the 'x' between numbers.
                 if (optarg[0] == '0' || optarg[0] == 'x') {
                     fprintf(stderr,"Option -m input format is: MxN, for example 4x4\n");
                     return 1;
@@ -83,17 +84,17 @@ int main(int argc, char **argv)
                 fprintf(stderr,"M: %d, N: %d\n",M,N);
                 break;
             case 'o':
- 		setlocale(LC_NUMERIC, "C");
+ 		setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
 		ocr_on = true;
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-                matrix_as_string = sj::utf8_to_wstring(ocr());
+                matrix_as_string = sj::utf8_to_wstring(ocr(res_x, res_y));
 		for (unsigned int i = 0; i < 16; i++) {
 		std::wcout << matrix_as_string[i];
 		if ((i+1) % 4 == 0)
 			std::wcout << std::endl;
 		}
 //		std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
-		setlocale(LC_ALL, "");
+		setlocale(LC_ALL, ""); // Needed for chars to work
 		break;
             case '?':
                 if (optopt == 'c')
@@ -112,11 +113,12 @@ int main(int argc, char **argv)
     std::string line;
     std::set<std::wstring> words;
     file.open(filename);
+            
     while (std::getline(file, line)){
         words.insert(sj::utf8_to_wstring(line));
     }
     file.close();
-    if (text_ui == true) {
+    if (text_ui == true || ocr_on == true) {
        /// fprintf(stderr, "TODO, not yet implemented");
 	std::wcout << L"Printing words with matrix: " << matrix_as_string << std::endl;;
 	sj::Solver solver(words, matrix_as_string, M, N);
@@ -136,7 +138,7 @@ int main(int argc, char **argv)
     }
     if (android_input == true) {
 	sj::Solver solver(words, matrix_as_string, M, N);
-        solver.Android_Solve(res_x, res_y); // Speksattu toistaiseksi vilin S3:selle, lisätään resoluutioflagit
+        solver.Android_Solve(res_x, res_y, event_num); // Speksattu toistaiseksi vilin S3:selle, lisätään resoluutioflagit
     }
     return 0;
 }

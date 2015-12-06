@@ -502,7 +502,7 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 						}
 						else {
 							solver.setAndroidSolverState(true);
-							std::thread thread(&Solver::Android_Solve, &solver, 720, 1280); // fixed screen resolution
+							std::thread thread(&Solver::Android_Solve, &solver, 720, 1280, 3); // fixed screen resolution
 							thread.detach();
 						}
 					}
