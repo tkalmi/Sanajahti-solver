@@ -128,10 +128,6 @@ int main(int argc, char **argv)
                 text_ui = true; // TODO
         }
     }
-    if (sj::utf8_to_wstring(matrix_as_string).size() != static_cast<unsigned int>(M*N) && text_ui == true){
-        std::cout << "Matrix size does not match dimensions!\n";
-        return 1;
-    }
     
     // get word list from file
     std::ifstream file;
@@ -144,6 +140,10 @@ int main(int argc, char **argv)
     }
     file.close();
     if (text_ui == true || ocr_on == true) {
+        if (sj::utf8_to_wstring(matrix_as_string).size() != static_cast<unsigned int>(M*N)){
+            std::cout << "Matrix size does not match dimensions!\n";
+            return 1;
+        }
        /// fprintf(stderr, "TODO, not yet implemented");
 	std::cout << "Printing words with matrix: " << matrix_as_string << std::endl;;
 	sj::Solver solver(words, matrix_as_string, M, N);
