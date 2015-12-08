@@ -2,6 +2,7 @@
 #define SCREENS_H
 
 #include "GUI.hpp"
+#include "ocr.hpp"
 #include <thread>
 
 /****************************************************************************/
@@ -9,14 +10,19 @@
 class Screen {
 public:
 	virtual std::string Run(sf::RenderWindow &window) = 0;
+protected:
+	std::string ocr_filename = "scrot.png"; // filename required by OCR functionality
 };
 
 /****************************************************************************/
 class MainMenu : public Screen {
 public:
-	MainMenu() {};
+	MainMenu(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string) : M(M), N(N), matrix_as_string(matrix_as_string) {};
 	virtual std::string Run(sf::RenderWindow &window);
 private:
+	unsigned int M;
+	unsigned int N;
+	std::wstring matrix_as_string;
 };
 
 /****************************************************************************/
