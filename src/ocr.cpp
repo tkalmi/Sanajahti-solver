@@ -66,7 +66,7 @@ std::string ocr(std::string filu)
     delete [] outText;
     pixDestroy(&image);
     if (sj::utf8_to_wstring(luettu).size() != 16){
-    	std::cout << "Could not detect matrix correctly\n";
+    	std::cout << "Could not detect matrix correctly. \n";
 	throw std::exception();
      	}
     return luettu;
