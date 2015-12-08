@@ -134,8 +134,9 @@ public:
      * Parameters:
      * x_size : screen size in pixels in x-dimension
      * y_size : screen size in pixels in y-dimension
+     * event_num : Android's input event. E.g. number 6 
      */
-    void Android_Solve(int x_size, int y_size);
+    void Android_Solve(int x_size, int y_size, int event_num);
     
     /*
      * Controls whether the Android Solver is allowed to run

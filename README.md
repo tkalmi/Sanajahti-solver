@@ -20,5 +20,5 @@ the matrix. The words are printed from longest to shortest and in alphabetical o
 To use OCR for automatic matrix fetch, you need to have leptonica and tesseract libraries installed.
 **Debian/Ubuntu**
 ```
-    apt-get install libleptonica-dev libtesseract-dev
+    apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra
 ```
