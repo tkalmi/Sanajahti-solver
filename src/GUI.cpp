@@ -386,13 +386,13 @@ int GUI::run()
 	std::map<std::string, Screen*> screens; // store different screens into a map
 	std::string screen = "main_menu";
 
-	// init screens and insert to screen map
-	MainMenu s0;
-	screens["main_menu"] = &s0;
-
 	unsigned int M;
 	unsigned int N;
 	std::wstring matrix_as_string;
+	
+	// init screens and insert to screen map
+	MainMenu *s0 = new MainMenu(M, N, matrix_as_string);
+	screens["main_menu"] = s0;
 
 	SizeQuery *s1 = new SizeQuery(M, N);
 	screens["size_query"] = s1; 

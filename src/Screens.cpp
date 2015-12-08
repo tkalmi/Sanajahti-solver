@@ -55,7 +55,13 @@ std::string MainMenu::Run(sf::RenderWindow &window)
 				if (teeItse.isInside(sf::Mouse::getPosition(window))) // user clicked "Tee oma matriisi"
 					return "size_query";
 				if (android.isInside(sf::Mouse::getPosition(window))) // user clicked "Hae Androidista"
-					continue; // TODO: tee siirtyminen androidiin
+					try {
+						M = 4;
+						N = 4;
+						matrix_as_string = sj::utf8_to_wstring(ocr(ocr_filename));
+					} catch (std::exception e) {
+						std::cout << e.what() << std::endl;
+					}
 			}
 		}
 
@@ -502,7 +508,8 @@ std::string SolveScreen::Run(sf::RenderWindow &window)
 						}
 						else {
 							solver.setAndroidSolverState(true);
-							std::thread thread(&Solver::Android_Solve, &solver, 720, 1280, 3); // fixed screen resolution
+							std::pair<int,int> res = get_res(ocr_filename);
+							std::thread thread(&Solver::Android_Solve, &solver, res.first, res.second, 3); // fixed screen resolution
 							thread.detach();
 						}
 					}
