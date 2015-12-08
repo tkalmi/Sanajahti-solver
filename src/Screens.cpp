@@ -59,6 +59,7 @@ std::string MainMenu::Run(sf::RenderWindow &window)
 						M = 4;
 						N = 4;
 						matrix_as_string = sj::utf8_to_wstring(ocr(ocr_filename));
+						return "solve_screen";
 					} catch (std::exception e) {
 						std::cout << e.what() << std::endl;
 					}
