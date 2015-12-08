@@ -58,6 +58,7 @@ std::string MainMenu::Run(sf::RenderWindow &window)
 					try {
 						M = 4;
 						N = 4;
+						system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
 						matrix_as_string = sj::utf8_to_wstring(ocr(ocr_filename));
 						if (matrix_as_string.size() != 16)
 							throw std::exception();
