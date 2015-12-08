@@ -27,6 +27,7 @@ int main(int argc, char **argv)
 {
     signal(SIGINT, handler);
     setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "en_US.utf8");
 
     bool text_ui = false; // Default is to use with GUI
     bool ocr_on = false;
@@ -85,7 +86,7 @@ int main(int argc, char **argv)
                 fprintf(stderr,"M: %d, N: %d\n",M,N);
                 break;
             case 'o':
- 		setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
+ 		//setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
 		ocr_on = true;
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
 		matrix_as_string = ocr(ocr_filename);
@@ -93,7 +94,7 @@ int main(int argc, char **argv)
                     std::cout << "Could not detect matrix correctly\n";
                     return 1;
                 }
-                setlocale(LC_NUMERIC, ""); // Needed for chars to work
+                //setlocale(LC_NUMERIC, ""); // Needed for chars to work
 		for (unsigned int i = 0; i < 16; i++) {
                     std::cout << char_to_str(matrix_as_string, i);
                     if ((i+1) % 4 == 0)
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
 		}
 		break;
 	   case 'l': // Android testing. Debugging purposes
-                setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
+                //setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
                 ocr_on = true;
                 //system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
                 matrix_as_string = ocr(ocr_filename);
@@ -109,7 +110,7 @@ int main(int argc, char **argv)
                     std::cout << "Could not detect matrix correctly";
                     return 1;
                 }
-                setlocale(LC_NUMERIC, ""); // Needed for chars to work
+                //setlocale(LC_NUMERIC, ""); // Needed for chars to work
                 for (unsigned int i = 0; i < 16; i++) {
                     std::cout << char_to_str(matrix_as_string, i);
                     if ((i+1) % 4 == 0)
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
                 text_ui = true; // TODO
         }
     }
-    if (sj::utf8_to_wstring(matrix_as_string).size() != static_cast<unsigned int>(M*N)){
+    if (sj::utf8_to_wstring(matrix_as_string).size() != static_cast<unsigned int>(M*N) && text_ui == true){
         std::cout << "Matrix size does not match dimensions!\n";
         return 1;
     }
