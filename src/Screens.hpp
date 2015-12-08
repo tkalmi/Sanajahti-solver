@@ -20,9 +20,9 @@ public:
 	MainMenu(unsigned int &M, unsigned int &N, std::wstring &matrix_as_string) : M(M), N(N), matrix_as_string(matrix_as_string) {};
 	virtual std::string Run(sf::RenderWindow &window);
 private:
-	unsigned int M;
-	unsigned int N;
-	std::wstring matrix_as_string;
+	unsigned int &M;
+	unsigned int &N;
+	std::wstring &matrix_as_string;
 };
 
 /****************************************************************************/
