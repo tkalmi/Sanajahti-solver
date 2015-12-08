@@ -97,7 +97,6 @@ std::vector<Path> sj::Solver::Paths(){
     return word_paths;
 }
 
-
 void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
     int x_base_offset = x_size / 5.538;
     int y_base_offset = y_size / 2.184;
@@ -109,7 +108,9 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
         ss << "adb shell sendevent /dev/input/event" << event_num << " 3 57 " << i; //ABS_MT_TRACKING_ID
         system(ss.str().c_str());
         ss.str("");
-        system("adb shell sendevent /dev/input/event6 3 48 3"); // ABS_MT_TOUCH_MAJOR
+        ss << "adb shell sendevent /dev/input/event" << event_num << " 3 48 3";
+        system(ss.str().c_str()); // ABS_MT_TOUCH_MAJOR
+        ss.str("");
         
         for (auto path : word.path()){
         	if (!android_solver_running)
