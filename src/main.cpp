@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     std::string ocr_filename = "scrot.png"; // default image file (PNG) to be used with OCR-library.
 
     std::string matrix_as_string;
-    while ((options = getopt(argc, argv, "ac:pw:m:o::l")) != -1) {
+    while ((options = getopt(argc, argv, "ac:pw:m:o::l:")) != -1) {
         switch(options) {
 	    case 'a': // Android support
 		android_input = true;
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
                 //setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
                 ocr_on = true;
                 //system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-                matrix_as_string = ocr(ocr_filename);
+                matrix_as_string = ocr(optarg);
                 if (sj::utf8_to_wstring(matrix_as_string).size() != 16){
                     std::cout << "Could not detect matrix correctly";
                     return 1;
