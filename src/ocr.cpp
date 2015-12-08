@@ -19,7 +19,8 @@ std::string ocr(std::string filu)
 	}
     int tile_size_x = res_x/8.4375; // 128
     int tile_size_y = res_y/17.455; // 110
-    int tile_offset = res_x/4.675; //230
+    int tile_offset = res_x/4.673; //230
+    int no_dots_offset = 0.011 * res_y;
     char *outText;
     
     std::stringstream ss;
@@ -48,7 +49,12 @@ std::string ocr(std::string filu)
             api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset, tile_size_x, tile_size_y);
             outText = api->GetUTF8Text();
             if (*outText == ' ') {
-                luettu += "ä";
+                api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset+no_dots_offset, tile_size_x, tile_size_y);
+                outText = api->GetUTF8Text();
+                if (*outText == 'O')
+                    luettu += "ö";
+                else if (*outText == 'A')
+                    luettu += "ä";
             }
             else {
                 luettu.push_back(tolower(*outText));

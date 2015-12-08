@@ -8,12 +8,13 @@
 #include <algorithm>
 #include <locale.h>
 #include <signal.h>
+#include <thread>
 
 static void handler(int signal)
 //adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png
 {
     switch (signal) {
-        case SIGINT: 
+        case SIGINT:
             fprintf(stderr, "Caught interrupt signal \n");
             break;
     }
@@ -89,7 +90,7 @@ int main(int argc, char **argv)
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
 		matrix_as_string = ocr(ocr_filename);
                 if (sj::utf8_to_wstring(matrix_as_string).size() != 16){
-                    std::cout << "Could not detect matrix correctly";
+                    std::cout << "Could not detect matrix correctly\n";
                     return 1;
                 }
                 setlocale(LC_NUMERIC, ""); // Needed for chars to work
