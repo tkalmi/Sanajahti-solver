@@ -1,4 +1,5 @@
 #include "ocr.hpp"
+#include "solver.hpp"
 
 std::string ocr(std::string filu)
 {
@@ -18,13 +19,14 @@ std::string ocr(std::string filu)
 	}
     int tile_size_x = res_x/8.4375; // 128
     int tile_size_y = res_y/17.455; // 110
-    int tile_offset = res_x/4.6956; //230
+    int tile_offset = res_x/4.675; //230
     char *outText;
     
     std::stringstream ss;
     std::string luettu;
 
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    
     // Initialize tesseract-ocr with English, without specifying tessdata path
     if (api->Init(NULL, "fra")) {
         fprintf(stderr, "Could not initialize tesseract.\n");
@@ -39,29 +41,24 @@ std::string ocr(std::string filu)
 	fprintf(stderr, "The file %s could not be read.\n",filu.c_str());
 	throw std::exception();
     }    
-api->SetImage(image);
-
+    api->SetImage(image);
     // Get OCR result
     for (unsigned int j = 0; j < 4 ; j++) {
         for (unsigned int i = 0; i < 4; i++) {
-        api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset, tile_size_x, tile_size_y);
-        outText = api->GetUTF8Text();
-	if (*outText == ' ') {
-		ss << L"ä";
-	}
-	else {
-		*outText = tolower(*outText);
-		ss << *outText;
-	}
+            api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset, tile_size_x, tile_size_y);
+            outText = api->GetUTF8Text();
+            if (*outText == ' ') {
+                luettu += "ä";
+            }
+            else {
+                luettu.push_back(tolower(*outText));
+            }
         }  
     }
-    luettu = ss.str();
     // Destroy used object and release memory
-    std::transform(luettu.begin(), luettu.end(), luettu.begin(), ::tolower); // To lower cae)
     api->End();
     delete [] outText;
     pixDestroy(&image);
-//    std::replace(luettu.begin(), luettu.end(), ' ', 'p');
     return luettu;
 }
 
@@ -75,7 +72,17 @@ std::pair<int, int> get_res(std::string filu) { // Get the resolution from PNGs 
     x = ntohl(x);
     y = ntohl(y);
 
-    std::cout << filu << ": dimensions are " << x << "x" << y << std::endl;
     std::pair<int, int> res (x,y);
     return res;
+}
+
+std::string char_to_str(std::string word, int index){
+    std::wstringstream wss;
+    std::wstring tmp = sj::utf8_to_wstring(word);
+    if (index < 0 || index > static_cast<int>(tmp.size())){
+        return "";
+    }
+    wss << tmp[index];
+    tmp = wss.str();
+    return sj::utf8_to_string(tmp);
 }

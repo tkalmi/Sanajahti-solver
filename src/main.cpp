@@ -6,18 +6,18 @@
 #include "solver.hpp"
 #include "ocr.hpp"
 #include <algorithm>
-
+#include <locale.h>
 #include <signal.h>
 
 static void handler(int signal)
 //adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png
 {
-switch (signal) {
-	case SIGINT: 
-	fprintf(stderr, "Caught interrupt signal \n");
-	break;
-}
-exit(signal);
+    switch (signal) {
+        case SIGINT: 
+            fprintf(stderr, "Caught interrupt signal \n");
+            break;
+    }
+    exit(signal);
 }
 
 int event_num = 3;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     std::string filename = "sanat.txt"; //default wordlist. Changeable by command flags.
     std::string ocr_filename = "scrot.png"; // default image file (PNG) to be used with OCR-library.
 
-    std::wstring matrix_as_string;
+    std::string matrix_as_string;
     while ((options = getopt(argc, argv, "ac:pw:m:o::l")) != -1) {
         switch(options) {
 	    case 'a': // Android support
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 		break;
             case 'c': // Disabling GUI, printing to shell.
 		if (ocr_on == false)
-			matrix_as_string = sj::utf8_to_wstring(optarg);
+                    matrix_as_string = optarg;   	
 		text_ui = true;
                 break;
      	    case 'p': // Printing words paths as well
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 		break;
             case 'w': // Defining other wordlist to be used.
                 filename = optarg;
-                std::wcout << L"filename: " << sj::utf8_to_wstring(filename) << std::endl; // Jotain hämärää, hävittää ääkköset. Testaa ./main -c 1 ja sen jälkeen ./main -c 1 -w sanat.txt
+                std::cout << "filename: " << filename << std::endl; // Jotain hämärää, hävittää ääkköset. Testaa ./main -c 1 ja sen jälkeen ./main -c 1 -w sanat.txt
                 break;
             case 'm': // Matrix input, input as MxN with the 'x' between numbers.
                 if (optarg[0] == '0' || optarg[0] == 'x') {
@@ -84,32 +84,37 @@ int main(int argc, char **argv)
                 fprintf(stderr,"M: %d, N: %d\n",M,N);
                 break;
             case 'o':
- 		setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
+ 		setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
 		ocr_on = true;
 		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-		matrix_as_string = sj::utf8_to_wstring(ocr(ocr_filename));
+		matrix_as_string = ocr(ocr_filename);
+                if (sj::utf8_to_wstring(matrix_as_string).size() != 16){
+                    std::cout << "Could not detect matrix correctly";
+                    return 1;
+                }
+                setlocale(LC_NUMERIC, ""); // Needed for chars to work
 		for (unsigned int i = 0; i < 16; i++) {
-		std::wcout << matrix_as_string[i];
-		if ((i+1) % 4 == 0)
-			std::wcout << std::endl;
+                    std::cout << char_to_str(matrix_as_string, i);
+                    if ((i+1) % 4 == 0)
+                            std::cout << std::endl;
 		}
-//		std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
-		setlocale(LC_ALL, ""); // Needed for chars to work
 		break;
 	   case 'l': // Android testing. Debugging purposes
-                setlocale(LC_NUMERIC, "C"); // Needed for OCR to work
+                setlocale(LC_NUMERIC, "en_US.utf8"); // Needed for OCR to work
                 ocr_on = true;
-//                system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
-                matrix_as_string = sj::utf8_to_wstring(ocr(ocr_filename));
-                for (unsigned int i = 0; i < 16; i++) {
-                std::wcout << matrix_as_string[i];
-                if ((i+1) % 4 == 0)
-                        std::wcout << std::endl;
+                //system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
+                matrix_as_string = ocr(ocr_filename);
+                if (sj::utf8_to_wstring(matrix_as_string).size() != 16){
+                    std::cout << "Could not detect matrix correctly";
+                    return 1;
                 }
-//              std::wcout << matrix_as_string[0] << " Length: " << matrix_as_string.size() << std::endl;
-                setlocale(LC_ALL, ""); // Needed for chars to work
+                setlocale(LC_NUMERIC, ""); // Needed for chars to work
+                for (unsigned int i = 0; i < 16; i++) {
+                    std::cout << char_to_str(matrix_as_string, i);
+                    if ((i+1) % 4 == 0)
+                            std::cout << std::endl;
+                }
                 break;
-	
             case '?':
                 if (optopt == 'c')
                     fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -120,6 +125,10 @@ int main(int argc, char **argv)
                 exit(1);
                 text_ui = true; // TODO
         }
+    }
+    if (sj::utf8_to_wstring(matrix_as_string).size() != static_cast<unsigned int>(M*N)){
+        std::cout << "Matrix size does not match dimensions!\n";
+        return 1;
     }
     
     // get word list from file
@@ -134,16 +143,16 @@ int main(int argc, char **argv)
     file.close();
     if (text_ui == true || ocr_on == true) {
        /// fprintf(stderr, "TODO, not yet implemented");
-	std::wcout << L"Printing words with matrix: " << matrix_as_string << std::endl;;
+	std::cout << "Printing words with matrix: " << matrix_as_string << std::endl;;
 	sj::Solver solver(words, matrix_as_string, M, N);
         std::vector<sj::Path> solved_words = solver.Paths();
 	for (auto i : solved_words) { 
 	    if(with_paths == true)
-            	std::wcout << sj::utf8_to_wstring(i.path_str()) << std::endl;
+            	std::cout << i.path_str() << std::endl;
 	    else
-		std::wcout << i.w_word() << std::endl;
+		std::cout << i.word() << std::endl;
         }
-	std::wcout << "Total words: " << solved_words.size() << std::endl;
+	std::cout << "Total words: " << solved_words.size() << std::endl;
     }        
     else {
         GUI gui(960, 640, words);

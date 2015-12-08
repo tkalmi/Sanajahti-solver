@@ -34,6 +34,16 @@ std::string ocr(std::string filu);
 
 std::pair<int, int> get_res(std::string filu);
 
+    /*
+     * Creates a string from the char of word[index]
+     * Special characters such as ä take multiple
+     * chars so normal word[index] does not word
+     * Parameters:
+     * word : string to get char at index
+     * index : index of char in the word
+     */
+std::string char_to_str(std::string word, int index);
+
 // TODO
 
 #endif /* OCR_H */
