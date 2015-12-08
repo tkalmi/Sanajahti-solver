@@ -20,7 +20,7 @@ switch (signal) {
 exit(signal);
 }
 
-static const int event_num = 3;
+int event_num = 3;
 
 int main(int argc, char **argv)
 {

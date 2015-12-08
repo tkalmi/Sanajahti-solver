@@ -8,8 +8,10 @@
 #include <iostream>
 #include <fstream> // For reading the PNG's dimensions
 #include <arpa/inet.h> // For converting unsigned integer's values between host and network byte order. ntohl()
-#include <algorithm>
+#include <ctype.h>
+
 #include "solver.hpp"
+#include <sstream>
 
 
 // Just testing 

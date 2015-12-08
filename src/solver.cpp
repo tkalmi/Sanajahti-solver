@@ -98,7 +98,7 @@ std::vector<Path> sj::Solver::Paths(){
 }
 
 
-void sj::Solver::Android_Solve(int x_size, int y_size, int event_num = 3){
+void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
     int x_base_offset = x_size / 5.538;
     int y_base_offset = y_size / 2.184;
     int offset = x_size / 4.675;

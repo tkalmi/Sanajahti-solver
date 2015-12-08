@@ -21,6 +21,7 @@ std::string ocr(std::string filu)
     int tile_offset = res_x/4.6956; //230
     char *outText;
     
+    std::stringstream ss;
     std::string luettu;
 
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
@@ -36,7 +37,7 @@ std::string ocr(std::string filu)
     Pix *image = pixRead(filu.c_str());
     if (image == NULL) {
 	fprintf(stderr, "The file %s could not be read.\n",filu.c_str());
-	exit(1);
+	throw std::exception();
     }    
 api->SetImage(image);
 
@@ -45,10 +46,18 @@ api->SetImage(image);
         for (unsigned int i = 0; i < 4; i++) {
         api->SetRectangle(x_offset+i*tile_offset, y_offset+j*tile_offset, tile_size_x, tile_size_y);
         outText = api->GetUTF8Text();
-	luettu.push_back(*outText);
+	if (*outText == ' ') {
+		ss << L"ä";
+	}
+	else {
+		*outText = tolower(*outText);
+		ss << *outText;
+	}
         }  
     }
+    luettu = ss.str();
     // Destroy used object and release memory
+    std::transform(luettu.begin(), luettu.end(), luettu.begin(), ::tolower); // To lower cae)
     api->End();
     delete [] outText;
     pixDestroy(&image);
