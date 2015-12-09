@@ -1,5 +1,4 @@
 #include "ocr.hpp"
-#include "solver.hpp"
 
 std::string ocr(std::string filu)
 {
@@ -66,7 +65,7 @@ std::string ocr(std::string filu)
     delete [] outText;
     pixDestroy(&image);
     if (sj::utf8_to_wstring(luettu).size() != 16){
-    	std::cout << "Could not detect matrix correctly. \n";
+    	std::cout << "Could not detect matrix correctly.\n";
 	throw std::exception();
      	}
     return luettu;
@@ -79,7 +78,7 @@ std::pair<int, int> get_res(std::string filu) { // Get the resolution from PNGs 
     kuva.read((char *)&x, 4);
     kuva.read((char *)&y, 4);
 
-    x = ntohl(x);
+    x = ntohl(x); // Convert values between host and network byte order. Necessary.
     y = ntohl(y);
 
     std::pair<int, int> res (x,y);

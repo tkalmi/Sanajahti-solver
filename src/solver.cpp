@@ -1,6 +1,20 @@
 #include <iostream>
 #include "solver.hpp"
+
 using namespace sj;
+
+bool s_interrupt_solver = false;
+
+static void handler(int signal)
+{
+    switch (signal) {
+        case SIGINT:
+            fprintf(stderr, "Caught interrupt signal \n");
+            s_interrupt_solver = true;
+            break;
+    }
+}
+
 
 /****************************************************************************/
 sj::Tile::Tile(std::string character, int xk, int yk) : xkoord(xk), ykoord(yk), ch(character) {
@@ -98,6 +112,7 @@ std::vector<Path> sj::Solver::Paths(){
 }
 
 void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
+    signal(SIGINT, handler);
     int x_base_offset = x_size / 5.538;
     int y_base_offset = y_size / 2.184;
     int offset = x_size / 4.675;
@@ -144,6 +159,8 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
         temp << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
         system(temp.str().c_str()); //SYN_REPORT
         ss.str("");
+	if (!s_interrupt_solver)
+		break;
     }
     this->setAndroidSolverState(false);
 }

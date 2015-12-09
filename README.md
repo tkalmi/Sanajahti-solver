@@ -13,7 +13,7 @@ the matrix. The words are printed from longest to shortest and in alphabetical o
 
 To be able to compile the program you need the additional libraries installed.
 
-On Debian/Ubuntu**
+On **Debian/Ubuntu**
 
 ```
     apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra 

@@ -9,6 +9,7 @@
 #include <locale>
 #include <boost/locale/encoding_utf.hpp>
 #include <string>
+#include <signal.h>
 
 namespace sj{
 
