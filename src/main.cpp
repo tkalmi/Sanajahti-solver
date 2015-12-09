@@ -126,7 +126,7 @@ struct settings parse_settings(int argc, char **argv)
            	if (optopt == 'o') {
                     opt.ocr_on = true;
                     try {  // If tesseract fails
-                        system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
+                        system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");
                         opt.matrix_as_string = ocr(opt.ocr_filename);
                     } 
                     catch (std::exception e){
