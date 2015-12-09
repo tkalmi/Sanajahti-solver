@@ -107,8 +107,8 @@ struct settings parse_settings(int argc, char **argv) {
                 try { // If tesseract fails
                     system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");
                     opt.matrix_as_string = ocr(opt.ocr_filename);
-                    if (std::remove(opt.ocr_filename.c_str()) != 0)
-                        std::cout << "Could not remove temporary screenshot file: " << opt.ocr_filename << std::endl;
+//                    if (std::remove(opt.ocr_filename.c_str()) != 0)
+                    //    std::cout << "Could not remove temporary screenshot file: " << opt.ocr_filename << std::endl;
                 } catch (std::exception e) {
                     exit(1);
                 }
