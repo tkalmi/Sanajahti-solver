@@ -1,5 +1,0 @@
-g++  -c -g -std=c++0x -Wall -Wextra -pedantic   -c -o main.o main.cpp
-g++  -c -g -std=c++0x -Wall -Wextra -pedantic   -c -o solver.o solver.cpp
-g++  -c -g -std=c++0x -Wall -Wextra -pedantic   -c -o GUI.o GUI.cpp
-g++  -c -g -std=c++0x -Wall -Wextra -pedantic   -c -o Screens.o Screens.cpp
-g++ main.o solver.o GUI.o Screens.o -lsfml-graphics -lsfml-window -lsfml-system  -o main 

@@ -16,7 +16,7 @@ To be able to compile the program you need the additional libraries installed.
 On **Debian/Ubuntu**
 
 ```
-    apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra 
+apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra 
 ```
 
 ## Features to be implemented (possibly)
@@ -37,5 +37,5 @@ You can use tesseract with any (Sanajahti) image fetched from phone via ```-o im
 If you intend to develop this solver program further, using Gtest files included in src/test is recommended.
 You also need to install libgtest
 ```
-    apt-get install libgtest-dev
+apt-get install libgtest-dev
 ```
