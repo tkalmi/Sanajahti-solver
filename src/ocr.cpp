@@ -20,7 +20,10 @@ std::string ocr(std::string filu)
     tile_size_y = res_y/17; // 110
     tile_offset = res_x/4.673; //230
     no_dots_offset = 0.011 * res_y;
-    char *outText;
+ 
+   setMsgSeverity(L_SEVERITY_NONE); // Disable leptonica warnings and errors, we handle them locally.
+
+   char *outText;
     
     std::stringstream ss;
     std::string luettu;
@@ -38,6 +41,9 @@ std::string ocr(std::string filu)
     // Open input image with leptonica library
     Pix *image = pixRead(filu.c_str());
     if (image == NULL) {
+        if (filu == "scrot.png")
+            fprintf(stderr, "\nCould not fetch screenshot from Android-phone.\nAre you sure you have Android Debug Bridge functional?\nTry running 'adb devices' in shell.\n");
+        else
 	fprintf(stderr, "The file %s could not be read.\n",filu.c_str());
 	throw std::exception();
     }    
