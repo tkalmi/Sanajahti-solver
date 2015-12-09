@@ -66,7 +66,7 @@ struct settings parse_settings(int argc, char **argv)
     
     opterr = 0; // getopt() parameters
     
-    while ((options = getopt(argc, argv, "ac:e:m::o:pw:")) != -1) {
+    while ((options = getopt(argc, argv, "ac:e:m:o:pw:")) != -1) {
         switch(options) {
 	    case 'a': // Android support
 		opt.android_input = true;
