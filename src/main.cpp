@@ -64,9 +64,9 @@ struct settings parse_settings(int argc, char **argv)
     std::string str; //Helper variable for option -m
     bool loytyy_x = false; // Helper variable with matrix validity check.
     
-opterr = 0; // getopt() parameters
+    opterr = 0; // getopt() parameters
     
-    while ((options = getopt(argc, argv, "ac:e:m:o:pw:")) != -1) {
+    while ((options = getopt(argc, argv, "ac:e:m::o:pw:")) != -1) {
         switch(options) {
 	    case 'a': // Android support
 		opt.android_input = true;
@@ -105,21 +105,15 @@ opterr = 0; // getopt() parameters
                 }
                 fprintf(stderr,"M: %d, N: %d\n", opt.M, opt.N);
                 break;
-            case 'o':
-            	opt.ocr_filename = optarg;
-		//system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");            	
+            case 'o':        	
             	opt.ocr_on = true;
-		try {  // If tesseract fails
-		opt.matrix_as_string = ocr(opt.ocr_filename);
-		} catch (std::exception e)
-		{
-			exit(1);
-		}  
-		for (unsigned int i = 0; i < 16; i++) {
-                    std::cout << char_to_str(opt.matrix_as_string, i);
-                    if ((i+1) % 4 == 0)
-                            std::cout << std::endl;
-		}
+                opt.ocr_filename = optarg;
+                try {  // If tesseract fail
+                    opt.matrix_as_string = ocr(opt.ocr_filename);
+                } 
+                catch (std::exception e){
+                    exit(1);
+                }  
 		break;
      	    case 'p': // Printing words paths as well
 		opt.with_paths = true;
@@ -130,20 +124,14 @@ opterr = 0; // getopt() parameters
                 break;
            case '?':
            	if (optopt == 'o') {
-		    	opt.ocr_on = true;
-	    		system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");            	
-			try {  // If tesseract fails
-			opt.matrix_as_string = ocr(opt.ocr_filename);
-			} 
-			catch (std::exception e)
-			{
-				exit(1);
-			}  
-			for (unsigned int i = 0; i < 16; i++) {
-		            std::cout << char_to_str(opt.matrix_as_string, i);
-		            if ((i+1) % 4 == 0)
-		                    std::cout << std::endl;
-		        }
+                    opt.ocr_on = true;
+                    try {  // If tesseract fails
+                        system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png");
+                        opt.matrix_as_string = ocr(opt.ocr_filename);
+                    } 
+                    catch (std::exception e){
+                        exit(1);
+                    }  
 		}
            	else if (optopt == 'c' || optopt == 'e' || optopt == 'w') {
            		fprintf(stderr, "Option -%c requires an argument.\n",optopt); // TODO add here help page reference
@@ -188,6 +176,7 @@ int main(int argc, char **argv)
     
     struct settings opt = parse_settings(argc, argv);
     
+    //std::cout << opt.words_filename;
     std::set<std::wstring> words = read_words_from_file (opt.words_filename); // Read words from file to memory.
 
 
@@ -196,8 +185,14 @@ int main(int argc, char **argv)
             std::cout << "Matrix size does not match dimensions!\n";
             return 1;
         }
+        for (unsigned int i = 0; i < sj::utf8_to_wstring(opt.matrix_as_string).size(); i++) {
+            std::cout << char_to_str(opt.matrix_as_string, i);
+            if ((i+1) % opt.M == 0)
+                std::cout << std::endl;
+            }
 	sj::Solver solver(words, opt.matrix_as_string, opt.M, opt.N);
         std::vector<sj::Path> solved_words = solver.Paths();
+        std::cout << "Found words:" << std::endl; 
 	for (auto i : solved_words) { 
 	    if(opt.with_paths == true)
             	std::cout << i.path_str() << std::endl;
@@ -222,5 +217,6 @@ int main(int argc, char **argv)
         gui.run();
         return 0;
     }
-    return 0;
+    
+    return 0; 
 }
