@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <fstream>
 #include <vector>
 #include <unistd.h>
@@ -107,9 +108,22 @@ struct settings parse_settings(int argc, char **argv)
                 break;
             case 'o':        	
             	opt.ocr_on = true;
-                opt.ocr_filename = optarg;
+		if (optarg[0] == '-') {
+                    try {  // If tesseract fails
+                        system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");
+                        opt.matrix_as_string = ocr(opt.ocr_filename);
+                    } 
+                    catch (std::exception e){
+                        exit(1);
+                    }  
+		}
+		else
+		    opt.ocr_filename = optarg;
                 try {  // If tesseract fail
                     opt.matrix_as_string = ocr(opt.ocr_filename);
+		    if(optarg != opt.ocr_filename)
+			if(std::remove(opt.ocr_filename.c_str()) != 0)
+				std::cout << "Could not remove temporary screenshot file: %s" << opt.ocr_filename << std::endl;
                 } 
                 catch (std::exception e){
                     exit(1);
@@ -128,6 +142,8 @@ struct settings parse_settings(int argc, char **argv)
                     try {  // If tesseract fails
                         system("adb shell screencap -p /sdcard/scrot.png && adb pull /sdcard/scrot.png && `adb shell rm /sdcard/scrot.png &>/dev/null`");
                         opt.matrix_as_string = ocr(opt.ocr_filename);
+			if (std::remove(opt.ocr_filename.c_str()) != 0)
+				std::cout << "Could not remove temporary screenshot file: %s" << opt.ocr_filename << std::endl;
                     } 
                     catch (std::exception e){
                         exit(1);
@@ -154,6 +170,7 @@ std::set<std::wstring> read_words_from_file (std::string words_filename)  // get
     std::ifstream file;
     std::string line;
     std::set<std::wstring> words;
+
     file.open(words_filename);
     
     while (std::getline(file, line)){
