@@ -22,7 +22,7 @@ the matrix. The words are printed from longest to shortest and in alphabetical o
 
 To be able to compile the program you need the additional libraries installed.
 
-On **Debian/Ubuntu**
+On **Debian/Ubuntu** -- other distros, see links at the end of README
 
 ```
 apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra
@@ -64,6 +64,8 @@ More help on using it from shell, run
 OCR for automatic matrix recognition, you need to have leptonica and tesseract libraries.
 You can use tesseract with any (Sanajahti) image fetched from phone via ```-o image.png``` flag. Notice that only PNG is supported. To use automatic screenshot fetching, you need to have ADB installed and smartphone drivers working.
 
+For the time being, only Tesseract v3.02 and Leptonica v1.70 are supported.
+
 ```
 apt-get install android-tools-adb
 ```
@@ -76,7 +78,15 @@ Currently only tested with Samsung S3.
 
 If you intend to develop this solver program further, using Gtest files included in src/test is recommended.
 You also need to install libgtest
+
 ```
 apt-get install libgtest-dev
 ```
 
+#### Additional links
+
+You can find instructions for building tesseract and leptonica from the source if there is no compiled version on you.
+
+Tesseract's GitHub https://github.com/tesseract-ocr/tesseracthttps://github.com/tesseract-ocr/tesseract
+
+Leptonica's homepage http://www.leptonica.com/
