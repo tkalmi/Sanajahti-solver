@@ -20,6 +20,7 @@ static void handler(int signal) {
             s_interrupt = true;
             exit(1);
             break;
+/* Not in use at the moment. Further developmen may require.
         case SIGILL:
             fprintf(stderr, "Illegal instruction\n");
             break;
@@ -29,6 +30,7 @@ static void handler(int signal) {
         case SIGFPE:
             fprintf(stderr, "Caught SIGFPE: arithmetic exception\n");
             break;
+*/
         case SIGSEGV:
             fprintf(stderr, "Caught SIGSEGV meaning segmentation fault. Perhaps GPU drivers fails? \n");
             exit(1);
@@ -63,7 +65,7 @@ struct settings parse_settings(int argc, char **argv) {
 
     opterr = 0; // getopt() parameters
 
-    while ((options = getopt(argc, argv, "ac:e:m:oO:pw:")) != -1) {
+    while ((options = getopt(argc, argv, "ac:e:hm:oO:pw:")) != -1) {
         switch (options) {
             case 'a': // Android support
                 opt.android_input = true;
@@ -77,6 +79,23 @@ struct settings parse_settings(int argc, char **argv) {
                 opt.event_num = atoi(optarg);
                 std::cout << "event number: " << optarg << std::endl;
                 break;
+	    case 'h':
+		std::cout 
+			<< "ssolver - Sanajahti solver" << std::endl
+			<< "Solves words from Sanajahti game with a fast algorithm." << std::endl
+			<< std::endl << std::endl
+			<< "Usage: ssolver [-ahop] [-c matrix_as_string] [-e event_num] [-m MxN] [-O image.png] [-w wordlist]" << std::endl;
+			<< "	-a		Enable Android input. Inputs words to Android-phone via ADB bridge, if device is available." << std::endl
+			<< "	-c		Input matrix as string. E.g. wordwordwordword." << std::endl
+			<< "	-e		Change the to what Android's /dev/input/event<num> we will input. Default without using -e is 3." << std::endl
+			<< "	-h		Display this help print." << std::endl
+			<< "	-m		Input custom size matrix with syntax MxN. For example, 4x4 matrix is inputted as " << ""4x4"" << std::endl
+			<< "	-o		Enable OCR (optical character recognition) support. Fetches screenshot from live game via ADB and solves words from it." << std:endl
+			<< "	-O		Enale OCR with custom image. For example, -O image.png. Does not fetch screenshot from Android." << std::endl
+			<< "	-p		Print word with their corresponding path. Coordinate (0,0) is the bottom left corner." << std::endl
+			<< "	-w		Use custom word list. -w words.txt" << std::endl;
+		exit(0);
+		break; 
             case 'm': // Matrix input, input as MxN with the 'x' between numbers.
                 if (optarg[0] == '0' || optarg[0] == 'x') {
                     fprintf(stderr, "Option -m input format is: MxN, for example 4x4\n");
