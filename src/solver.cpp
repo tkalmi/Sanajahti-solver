@@ -103,7 +103,6 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
     int y_base_offset = y_size / 2.184;
     int offset = x_size / 4.675;
     std::stringstream ss;
-    std::stringstream temp;
     int i = 0;
     for (auto word : word_paths){
         ss << "adb shell sendevent /dev/input/event" << event_num << " 3 57 " << i; //ABS_MT_TRACKING_ID
@@ -111,11 +110,10 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
         ss.str("");
         ss << "adb shell sendevent /dev/input/event" << event_num << " 3 48 3";
         system(ss.str().c_str()); // ABS_MT_TOUCH_MAJOR
-        ss.str("");
-        
+        ss.str("");       
         for (auto path : word.path()){
-        	if (!android_solver_running)
-        		return;
+            if (!android_solver_running)
+                return;
             ss << "adb shell sendevent /dev/input/event" << event_num << " 3 53 " << path.x() * offset + x_base_offset; //ABS_MT_POSITION_X
             system(ss.str().c_str());
             ss.str("");
@@ -124,26 +122,26 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
             ss.str("");
             if (i > 0){
                 if( i % 2 == 0){
-                    temp << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 2";
-                    system(temp.str().c_str()); //Dunno, somekind of swipe
+                    ss << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 2";
+                    system(ss.str().c_str()); //Dunno, somekind of swipe
                 }
                 else {
-                    temp << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 0";
-                    system(temp.str().c_str()); //Dunno, somekind of swipe
+                    ss << "adb shell sendevent /dev/input/event" << event_num << " 3 003e 0";
+                    system(ss.str().c_str()); //Dunno, somekind of swipe
                 }
             }
-            temp.str("");
-            temp << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
-            system(temp.str().c_str()); //SYN_REPORT
-            temp.str("");
+            ss.str("");
+            ss << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
+            system(ss.str().c_str()); //SYN_REPORT
+            ss.str("");
             i++;
         }
         i = 0;
-        temp << "adb shell sendevent /dev/input/event" << event_num << " 3 57 4294967295";
-        system(temp.str().c_str()); // ABS_MT_TRACKING_ID
-        temp.str("");
-        temp << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
-        system(temp.str().c_str()); //SYN_REPORT
+        ss << "adb shell sendevent /dev/input/event" << event_num << " 3 57 4294967295";
+        system(ss.str().c_str()); // ABS_MT_TRACKING_ID
+        ss.str("");
+        ss << "adb shell sendevent /dev/input/event" << event_num << " 0 0 0";
+        system(ss.str().c_str()); //SYN_REPORT
         ss.str("");
     }
     this->setAndroidSolverState(false);
@@ -152,6 +150,7 @@ void sj::Solver::Android_Solve(int x_size, int y_size, int event_num){
 std::vector<Path> sj::Solver::find_words(std::vector<std::vector<Tile>>& matrix, std::set<std::wstring> dictionary) {
     std::map<std::wstring, std::set<std::wstring>> dictionaries;
     std::wstring letter;
+    //Separate dictionary by first letter
     for (std::wstring word : dictionary){
         letter = word[0];
         dictionaries[letter].insert(word);
