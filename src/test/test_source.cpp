@@ -141,10 +141,10 @@ TEST(test_algorithm7, OCR) {
     DIR *dip;
     struct dirent *dit;
 
-    int count = -1;
+    int count = -3; // . .. and answers.txt
 
-    if ((dip = opendir("testpics")) == NULL) {
-        fprintf(stderr,"Could not find testpics folder");
+    if ((dip = opendir("testpics/")) == NULL) {
+        fprintf(stderr,"Could not find testpics folder.\n");
 	exit(1);
 	}
     while ((dit = readdir(dip)) != NULL) {
@@ -158,8 +158,12 @@ TEST(test_algorithm7, OCR) {
     std::string line;
 
     for (int i = 0; i < count; i++) {
+	std::cout << count;
+	ss << "testpics/scrot_" << i << ".png";
 	scrot = ocr(ss.str());
+	std::cout << "Picture: " << ss.str() << " - " << scrot << std::endl; 
 	std::getline(file,line);
+	ss.str("");
 	EXPECT_EQ(scrot,line);
 	}
     file.close();
