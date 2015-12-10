@@ -16,5 +16,5 @@ $(EXECUTABLE): $(OBJECTS)
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
 
-run: main
-	./main
+run: all
+	./ssolver
