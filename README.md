@@ -32,22 +32,25 @@ apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra
 ---------------------
 
 To run the program with GUI (Graphical User Interface), just run the program from shell
+
 ```
 ./ssolver
 ```
 
 You can also use it without GUI, using command flags and arguments. For example, solve Sanajahti game with OCR and input them to Android using
+
 ```
 ./ssolver -a -o 
 ```
 
-More help on using it without GUI, run
+More help on using it from shell, run
 
 ```
 ./solver -h
 ```
 
 ### Features to be implemented (possibly)
+-----------------------------------------
 
 - Program could try to remove words that were not found in Sanajahti's own dictionary. E.g. use OCR after game to determine the words that Sanajahti approves.
 	For the time being program wastes time inputing words that Sanajahti does not accept.
