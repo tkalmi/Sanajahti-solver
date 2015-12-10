@@ -76,6 +76,7 @@ Currently only tested with Samsung S3.
 
 If you intend to develop this solver program further, using Gtest files included in src/test is recommended.
 You also need to install libgtest
+
 ```
 apt-get install libgtest-dev
 ```
