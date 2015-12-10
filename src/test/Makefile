@@ -73,5 +73,5 @@ ocr.o : $(USER_DIR)/ocr.cpp $(USER_DIR)/ocr.hpp $(GTEST_HEADERS)
 test_source.o : $(TEST_DIR)/test_source.cpp 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_source.cpp
 
-solver_test : main.o solver.o ocr.o test_source.o gtest_main.a
+solver_test : main.o solver.o ocr.o test_source.o gtest_main.a -llept -ltesseract
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
