@@ -165,11 +165,16 @@ struct settings parse_settings(int argc, char **argv) {
     return opt;
 }
 
+
 std::set<std::wstring> read_words_from_file(std::string words_filename) { // get word list from file
     std::ifstream file;
     std::string line;
     std::set<std::wstring> words;
     file.open(words_filename);
+    if (!file.is_open()) {
+	fprintf(stderr, "Could not open word list %s.\n",words_filename.c_str());
+    	exit(1);
+    }
 
     while (std::getline(file, line)) {
         words.insert(sj::utf8_to_wstring(line));
