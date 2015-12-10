@@ -151,10 +151,10 @@ struct settings parse_settings(int argc, char **argv) {
             case '?':
 
                 if (optopt == 'c' || optopt == 'e' || optopt == 'w' || optopt == 'C') {
-                    fprintf(stderr, "Option -%c requires an argument.\n", optopt); // TODO add here help page reference
+                    fprintf(stderr, "Option -%c requires an argument. See -h for more information\n", optopt); // TODO add here help page reference
                     exit(1);
                 } else {
-                    fprintf(stderr, "Invalid option -%c\n", optopt);
+                    fprintf(stderr, "Invalid option -%c. See -h for more information\n", optopt);
                     exit(1);
                 }
                 break;

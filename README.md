@@ -28,6 +28,9 @@ On **Debian/Ubuntu** -- other distros, see links at the end of README
 apt-get install libleptonica-dev libtesseract-dev tesseract-ocr-fra
 ```
 
+For the time being, only Tesseract v3.02 and Leptonica v1.70 are supported.
+
+
 ## How do you run it?
 ---------------------
 
@@ -63,8 +66,6 @@ More help on using it from shell, run
 
 OCR for automatic matrix recognition, you need to have leptonica and tesseract libraries.
 You can use tesseract with any (Sanajahti) image fetched from phone via ```-o image.png``` flag. Notice that only PNG is supported. To use automatic screenshot fetching, you need to have ADB installed and smartphone drivers working.
-
-For the time being, only Tesseract v3.02 and Leptonica v1.70 are supported.
 
 ```
 apt-get install android-tools-adb
