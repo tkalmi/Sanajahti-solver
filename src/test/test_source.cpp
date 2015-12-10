@@ -1,10 +1,14 @@
 #include <gtest/gtest.h> //GoogleTest libraries
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <unistd.h>
+#include <dirent.h>
+
 #include "../GUI.hpp"
 #include "../solver.hpp"
+#include "../ocr.hpp"
 
 /*
  * TODO:
@@ -133,3 +137,30 @@ TEST(test_algorithm6, constructors){
     EXPECT_EQ(solved_words3.Paths()[0].w_word(), solved_words4.Paths()[0].w_word());
 }
 
+TEST(test_algorithm7, OCR) {
+    DIR *dip;
+    struct dirent *dit;
+
+    int count = -1;
+
+    if ((dip = opendir("testpics")) == NULL) {
+        fprintf(stderr,"Could not find testpics folder");
+	exit(1);
+	}
+    while ((dit = readdir(dip)) != NULL) {
+	count++;
+	}
+    
+    std::ifstream file;
+    file.open("testpics/answers.txt");
+    std::stringstream ss;
+    std::string scrot;
+    std::string line;
+
+    for (int i = 0; i < count; i++) {
+	scrot = ocr(ss.str());
+	std::getline(file,line);
+	EXPECT_EQ(scrot,line);
+	}
+    file.close();
+}

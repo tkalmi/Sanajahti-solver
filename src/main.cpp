@@ -89,10 +89,10 @@ struct settings parse_settings(int argc, char **argv) {
 			<< "	-c		Input matrix as string. E.g. wordwordwordword." << std::endl
 			<< "	-e		Change the to what Android's /dev/input/event<num> we will input. Default without using -e is 3." << std::endl
 			<< "	-h		Display this help print." << std::endl
-			<< "	-m		Input custom size matrix with syntax MxN. For example, 4x4 matrix is inputted as " << "4x4" << std::endl
+			<< "	-m		Input custom size matrix with syntax MxN. For example, ./ssolver -m 4x4" << std::endl
 			<< "	-o		Enable OCR (optical character recognition) support. Fetches screenshot from live game via ADB and solves words from it." << std::endl
 			<< "	-O		Enale OCR with custom image. For example, -O image.png. Does not fetch screenshot from Android." << std::endl
-			<< "	-p		Print word with their corresponding path. Coordinate (0,0) is the bottom left corner." << std::endl
+			<< "	-p		Print word with their corresponding path. Coordinate (0,0) is the top left corner." << std::endl
 			<< "	-w		Use custom word list. -w words.txt" << std::endl;
 		exit(0);
 		break; 
