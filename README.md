@@ -1,6 +1,5 @@
 # Sanajahti Solver
 ------------------
-
 This repository contains three subdirectories:
 
 * plan/ for the plan 
@@ -9,7 +8,6 @@ This repository contains three subdirectories:
 
 ## What is it?
 --------------
-
 This is a word solver for Sanajahti-game. It has very fast algorithm for solving the words from pre-defined word dictionary and it can use Android Debug Bridge and OCR for automatic recognizition, solving and inputting the solved words.
 
 Our program should work as following:
@@ -19,7 +17,6 @@ the matrix. The words are printed from longest to shortest and in alphabetical o
 
 ## How to build it?
 -------------------
-
 To be able to compile the program you need the additional libraries installed.
 
 On **Debian/Ubuntu** -- other distros, see links at the end of README
@@ -33,7 +30,6 @@ For the time being, only Tesseract v3.02 and Leptonica v1.70 are supported.
 
 ## How do you run it?
 ---------------------
-
 To run the program with GUI (Graphical User Interface), just run the program from shell
 
 ```
@@ -54,7 +50,6 @@ More help on using it from shell, run
 
 ### OCR (Optical Character Recognition) and Android support
 -----------------------------------------------------------
-
 OCR for automatic matrix recognition, you need to have leptonica and tesseract libraries.
 You can use tesseract with any (Sanajahti) image fetched from phone via ```-o image.png``` flag. Notice that only PNG is supported. To use automatic screenshot fetching, you need to have ADB installed and smartphone drivers working.
 
@@ -62,19 +57,17 @@ You can use tesseract with any (Sanajahti) image fetched from phone via ```-o im
 apt-get install android-tools-adb
 ```
 
-Android input works with sendevent command from adb shell. Event number changes with different smartphone models and it is coded to be 3 as default. You can change it with -e flag. 
+Android input works with sendevent command from adb shell. Event number changes with different smartphone models and it is coded to be 3 as default. You can change it with ```-e``` flag. 
 
 Currently only tested with Samsung S3.
 
 ### For developers
 ------------------
-
 If you intend to develop this solver program further, using Gtest files included in src/test is recommended.
 You also need to install libgtest
 
 #### Features to be implemented (possibly)
 -----------------------------------------
-
 - Program could try to remove words that were not found in Sanajahti's own dict$
         For the time being program wastes time inputing words that Sanajahti do$
 - Program could work around ads independently and start a new game when possibl$
