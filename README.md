@@ -59,6 +59,8 @@ apt-get install android-tools-adb
 
 Android input works with sendevent command from adb shell. Event number changes with different smartphone models and it is coded to be 3 as default. You can change it with ```-e``` flag. 
 
+To find out **your Android's** event number, use command "adb shell getevent -l" from linux shell and touch your touchscreen, it should output multiple lines starting with the device path. E.g. "/dev/input/event3".
+
 Currently only tested with Samsung S3 and Nexus 5. Here's an video showing the inputing on Nexus 5: https://www.youtube.com/watch?v=i1URS1P_ujY
 
 ### For developers
@@ -69,10 +71,10 @@ You also need to install libgtest
 #### Features to be implemented (possibly)
 -----------------------------------------
 - Program could try to remove words that were not found in Sanajahti's own dictionary
-        For the time being program wastes time inputing words that Sanajahti do$
+        For the time being program wastes time inputing words that Sanajahti's dictionary doesn't have.
 - Program could work around ads independently and start a new game when possibl$
 - getopt_long arguments, e.g. --help
-- (Print words to stdout same time as it inputs to Android. Would create cool a$
+- (Print words to stdout same time as it inputs to Android. Would create cool atmosphere.
 
 
 
