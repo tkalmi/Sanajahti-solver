@@ -70,11 +70,11 @@ You also need to install libgtest
 
 #### Features to be implemented (possibly)
 -----------------------------------------
-- Program could try to remove words that were not found in Sanajahti's own dictionary
+- Program could try to remove words that were not found in Sanajahti's own dictionary.
         For the time being program wastes time inputing words that Sanajahti's dictionary doesn't have.
 - Program could work around ads independently and start a new game when possibl$
-- getopt_long arguments, e.g. --help
-- (Print words to stdout same time as it inputs to Android. Would create cool atmosphere.
+- getopt_long arguments, e.g. `--help`
+- Print words to stdout same time as it inputs to Android. Would create cool atmosphere.
 
 
 
